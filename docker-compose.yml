@@ -1,0 +1,13 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_tse
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SenhaForte123@
+      - MSSQL_PID=Developer
+    ports:
+      - "127.0.0.1:1433:1433"  # <--- Força o bind direto no loopback do host
+    volumes:
+      - ./data/mssql:/var/opt/mssql:z

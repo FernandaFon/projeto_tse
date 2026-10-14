@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Dados e Volumes Docker
+data/
+data/mssql/
+*.parquet
+*.csv
+*.zip
+
+# IDEs e Configurações de Ambiente
+.vscode/
+.idea/
+.env
+*.log
+
+# DBeaver
+.dbeaver/
