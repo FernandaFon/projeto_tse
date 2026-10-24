@@ -1,134 +1,165 @@
+"""Carga: lê os Parquets filtrados em data/silver/ e carrega no SQL Server (schema stg).
+
+Cada Parquet é lido em lotes (nunca inteiro na memória) e as colunas são criadas
+como NVARCHAR com a largura realmente necessária, o que mantém o fast_executemany leve.
+
+Uso:
+    uv run pipelines/02_load_staging.py                # pula tabelas já carregadas por completo
+    uv run pipelines/02_load_staging.py --forcar       # recria todas as tabelas stg
+    uv run pipelines/02_load_staging.py --lote 5000    # lote menor, se faltar memória
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+import time
 from pathlib import Path
-import pandas as pd
+
+import pyarrow.compute as pc
+import pyarrow.parquet as pq
 import pyodbc
-from sqlalchemy import create_engine, text
 
-# --- CONFIGURAÇÕES DE CONEXÃO AO SQL SERVER ---
-DB_USER = "sa"
-DB_PASSWORD = "SenhaForte123@"
-DB_HOST = "127.0.0.1"
-DB_PORT = "1433"
-DB_NAME = "tse_warehouse"
+from config import ANO, BASE_DIR, catalogo, string_conexao
+
+LOTE_PADRAO = 20_000
+LIMITE_NVARCHAR = 4000  # acima disso a coluna vira NVARCHAR(MAX)
 
 
-# Função criadora de conexão customizada para resolver o handshake do ODBC Driver 18 no Docker/Arch Linux
-def get_connection():
-    conn_str = (
-        f"DRIVER={{ODBC Driver 18 for SQL Server}};"
-        f"SERVER={DB_HOST},{DB_PORT};"
-        f"DATABASE={DB_NAME};"
-        f"UID={DB_USER};"
-        f"PWD={DB_PASSWORD};"
-        f"TrustServerCertificate=yes;"
+def medir_larguras(pf: pq.ParquetFile, lote: int) -> dict[str, int]:
+    """Maior comprimento de texto de cada coluna, em uma única passada pelo arquivo."""
+    larguras = {c: 1 for c in pf.schema_arrow.names}
+    for batch in pf.iter_batches(batch_size=lote):
+        for nome, coluna in zip(batch.schema.names, batch.columns):
+            maior = pc.max(pc.utf8_length(coluna)).as_py()
+            if maior and maior > larguras[nome]:
+                larguras[nome] = maior
+    return larguras
+
+
+def tipo_sql(largura: int) -> str:
+    if largura > LIMITE_NVARCHAR:
+        return "NVARCHAR(MAX)"
+    # margem de segurança, arredondando para cima em múltiplos de 10
+    return f"NVARCHAR({min(((largura + 9) // 10) * 10, LIMITE_NVARCHAR)})"
+
+
+def contar_linhas(conn: pyodbc.Connection, tabela: str) -> int | None:
+    """Linhas atuais em stg.<tabela>, ou None se a tabela não existe."""
+    cur = conn.cursor()
+    cur.execute("SELECT OBJECT_ID(?, 'U')", f"stg.{tabela}")
+    if cur.fetchone()[0] is None:
+        return None
+    cur.execute(f"SELECT COUNT_BIG(*) FROM stg.{tabela}")
+    return int(cur.fetchone()[0])
+
+
+def recriar_tabela(
+    conn: pyodbc.Connection, tabela: str, larguras: dict[str, int]
+) -> None:
+    cur = conn.cursor()
+    cur.execute(
+        "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'stg') EXEC('CREATE SCHEMA stg');"
     )
-    return pyodbc.connect(conn_str)
-
-
-# Cria o engine do SQLAlchemy injetando o creator personalizado
-engine = create_engine("mssql+pyodbc://", creator=get_connection)
-
-# Diretórios base
-BASE_DIR = Path(__file__).resolve().parent.parent
-SILVER_DIR = BASE_DIR / "data" / "silver"
-
-
-def criar_esquema_stg(engine):
-    """Cria o esquema 'stg' no SQL Server se ele não existir."""
-    print("[BANCO DE DADOS] Garantindo a existência do esquema [stg]...")
-    with engine.begin() as conn:
-        conn.execute(
-            text(
-                "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'stg') EXEC('CREATE SCHEMA stg');"
-            )
-        )
-
-
-def carregar_parquet_para_staging():
-    if not SILVER_DIR.exists():
-        print(
-            f"[ERRO] Diretório Silver não encontrado: {SILVER_DIR}. Execute a extração primeiro."
-        )
-        return
-
-    print(
-        f"[CONEXÃO] Conectando ao SQL Server em {DB_HOST}:{DB_PORT} (container: sql-server)..."
+    colunas = ", ".join(f"[{c}] {tipo_sql(w)} NULL" for c, w in larguras.items())
+    cur.execute(
+        f"IF OBJECT_ID('stg.{tabela}', 'U') IS NOT NULL DROP TABLE stg.{tabela}; "
+        f"CREATE TABLE stg.{tabela} ({colunas});"
     )
-    try:
-        criar_esquema_stg(engine)
-    except Exception as e:
-        print(f"[ERRO] Falha ao conectar ao SQL Server: {e}")
-        return
+    conn.commit()
 
-    # Varre todas as pastas dentro de data/silver/
-    datasets = [d for d in SILVER_DIR.iterdir() if d.is_dir()]
 
-    if not datasets:
-        print("[AVISO] Nenhum dataset encontrado na camada Silver para carregar.")
-        return
+def carregar_parquet_para_stg(
+    parquet_file: Path,
+    tabela: str,
+    conn: pyodbc.Connection,
+    lote: int,
+    forcar: bool,
+) -> int:
+    pf = pq.ParquetFile(parquet_file)
+    esperado = pf.metadata.num_rows
+    rotulo = parquet_file.relative_to(BASE_DIR)
+    print(f"[CARGA] {rotulo} -> stg.{tabela}")
 
-    for dataset_path in datasets:
-        dataset_name = dataset_path.name
-        tabela_stg = f"stg_{dataset_name}"
+    if esperado == 0:
+        print("   [AVISO] Parquet vazio; nada a carregar")
+        return 0
 
-        print(
-            f"\n[CARGA] Processando dataset: {dataset_name} -> Tabela: stg.{tabela_stg}"
-        )
+    if not forcar:
+        existentes = contar_linhas(conn, tabela)
+        if existentes == esperado:
+            print(f"   [CACHE] já carregada ({existentes:,} linhas)")
+            return existentes
 
-        # Localiza todos os ficheiros data.parquet dentro da estrutura (suportando partições)
-        arquivos_parquet = list(dataset_path.glob("**/*.parquet"))
+    larguras = medir_larguras(pf, lote)
+    recriar_tabela(conn, tabela, larguras)
 
-        if not arquivos_parquet:
-            print(f"  -> Nenhum ficheiro Parquet encontrado para {dataset_name}.")
+    colunas = ", ".join(f"[{c}]" for c in larguras)
+    marcas = ", ".join("?" * len(larguras))
+    sql_insert = (
+        f"INSERT INTO stg.{tabela} WITH (TABLOCK) ({colunas}) VALUES ({marcas})"
+    )
+
+    cur = conn.cursor()
+    cur.fast_executemany = True
+    total = 0
+    inicio = time.time()
+    for batch in pf.iter_batches(batch_size=lote):
+        # None vira NULL no banco (valores vazios do CSV do TSE)
+        linhas = [tuple(l.values()) for l in batch.to_pylist()]
+        cur.executemany(sql_insert, linhas)
+        conn.commit()
+        total += len(linhas)
+        print(f"   {total:,} / {esperado:,}", end="\r", flush=True)
+
+    print(f"   [OK] {total:,} linhas em stg.{tabela} ({time.time() - inicio:.0f}s)   ")
+    return total
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawTextHelpFormatter
+    )
+    ap.add_argument("--forcar", action="store_true", help="recria as tabelas stg")
+    ap.add_argument("--lote", type=int, default=LOTE_PADRAO, help="linhas por lote")
+    ap.add_argument("--ano", type=int, default=ANO)
+    args = ap.parse_args()
+
+    print("\n=== Carga Staging no SQL Server ===")
+    falhas: list[str] = []
+
+    for base in catalogo(args.ano):
+        parquet_file = base.parquet_path(args.ano)
+        if not parquet_file.exists():
+            print(f"[PULANDO] {base.rotulo} (Parquet não encontrado em {parquet_file})")
+            falhas.append(f"{base.rotulo}: sem Parquet")
             continue
 
-        is_first_file = True
-        total_linhas_dataset = 0
+        tabela = f"stg_{base.silver}"
+        if base.uf:
+            tabela += f"_{base.uf.lower()}"
 
-        # Processamento ficheiro a ficheiro para poupar memória RAM
-        for arq in arquivos_parquet:
-            try:
-                df_part = pd.read_parquet(arq)
-
-                # Extrai metadados de partições do caminho (ex: ano=2022, uf=SP) se existirem
-                for parte in arq.parts:
-                    if "=" in parte:
-                        k, v = parte.split("=")
-                        df_part[k.upper()] = v
-
-                # Padroniza os nomes das colunas para maiúsculas e substitui pontos por underscores
-                df_part.columns = [
-                    c.strip().replace(".", "_").upper() for c in df_part.columns
-                ]
-
-                # O primeiro ficheiro substitui/cria a tabela; os seguintes fazem append
-                modo_escrita = "replace" if is_first_file else "append"
-
-                print(
-                    f"  -> A inserir {len(df_part)} registos de {arq.name} (modo: {modo_escrita})..."
+        # Uma conexão por tabela: se uma cair, as demais não são afetadas.
+        try:
+            with pyodbc.connect(string_conexao(), autocommit=False) as conn:
+                conn.timeout = 0  # sem limite por comando
+                carregar_parquet_para_stg(
+                    parquet_file, tabela, conn, args.lote, args.forcar
                 )
+        except Exception as e:  # noqa: BLE001
+            print(f"\n   [ERRO] {tabela}: {e}")
+            falhas.append(f"{tabela}: {e}")
 
-                df_part.to_sql(
-                    name=tabela_stg,
-                    con=engine,
-                    schema="stg",
-                    if_exists=modo_escrita,
-                    index=False,
-                    chunksize=50_000,
-                )
+    if falhas:
+        print(f"\n[ATENÇÃO] {len(falhas)} tabela(s) com problema:")
+        for f in falhas:
+            print(f"  - {f}")
+        print("Rode de novo: as tabelas já completas são puladas.")
+        return 1
 
-                total_linhas_dataset += len(df_part)
-                is_first_file = False
-
-                # Liberta explicitamente a memória RAM do DataFrame deste ficheiro
-                del df_part
-
-            except Exception as e:
-                print(f"  -> Erro ao processar o ficheiro {arq.name}: {e}")
-
-        print(
-            f"  -> Sucesso! Tabela stg.{tabela_stg} totalmente carregada ({total_linhas_dataset} registos)."
-        )
+    print("\nCarga para staging concluída com sucesso.")
+    return 0
 
 
 if __name__ == "__main__":
-    carregar_parquet_para_staging()
+    sys.exit(main())
