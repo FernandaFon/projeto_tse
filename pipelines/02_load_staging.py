@@ -20,10 +20,38 @@ import pyarrow.compute as pc
 import pyarrow.parquet as pq
 import pyodbc
 
-from config import ANO, BASE_DIR, catalogo, string_conexao
+from config import ANO, BASE_DIR, DB_NAME, ODBC_DRIVER, catalogo, string_conexao
 
 LOTE_PADRAO = 20_000
 LIMITE_NVARCHAR = 4000  # acima disso a coluna vira NVARCHAR(MAX)
+ESPERA_BANCO = 120  # segundos aguardando o container do SQL Server aceitar conexões
+
+
+def garantir_banco() -> None:
+    """Espera o SQL Server responder e cria o banco DB_NAME, se ainda não existir."""
+    if ODBC_DRIVER not in pyodbc.drivers():
+        raise SystemExit(
+            f"[ERRO] Driver '{ODBC_DRIVER}' não encontrado (instalados: {pyodbc.drivers()}). "
+            "Instale o ODBC Driver 18 (veja o README)."
+        )
+    limite = time.time() + ESPERA_BANCO
+    while True:
+        try:
+            conn = pyodbc.connect(string_conexao("master"), autocommit=True, timeout=10)
+            break
+        except pyodbc.Error as e:
+            if time.time() > limite:
+                raise SystemExit(f"[ERRO] SQL Server não respondeu em {ESPERA_BANCO}s: {e}")
+            print("   aguardando o SQL Server ficar pronto...")
+            time.sleep(5)
+    with conn:
+        conn.cursor().execute(
+            f"IF DB_ID(N'{DB_NAME}') IS NULL CREATE DATABASE [{DB_NAME}];"
+            # O DW é recriado do zero a cada carga: sem backup de log, o modelo FULL só faz
+            # o log de transações crescer (dezenas de GB). SIMPLE recicla o log.
+            f"ALTER DATABASE [{DB_NAME}] SET RECOVERY SIMPLE;"
+        )
+    conn.close()
 
 
 def medir_larguras(pf: pq.ParquetFile, lote: int) -> dict[str, int]:
@@ -126,6 +154,7 @@ def main() -> int:
     args = ap.parse_args()
 
     print("\n=== Carga Staging no SQL Server ===")
+    garantir_banco()
     falhas: list[str] = []
 
     for base in catalogo(args.ano):
