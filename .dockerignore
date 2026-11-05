@@ -1,0 +1,6 @@
+# A imagem só precisa de pyproject.toml, uv.lock e .python-version;
+# o resto do projeto é montado em /app pelo docker-compose.
+*
+!pyproject.toml
+!uv.lock
+!.python-version

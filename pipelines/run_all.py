@@ -5,13 +5,16 @@ Uso:
     uv run pipelines/run_all.py --pular-extracao      # reaproveita data/silver/
     uv run pipelines/run_all.py --sem-tsql            # para depois da carga em stg
     uv run pipelines/run_all.py --forcar              # refaz downloads e Parquet
+    uv run pipelines/run_all.py --sem-docker          # o SQL Server já está no ar (uso no container)
 
-Funciona igual em Linux e Windows.
+Funciona igual em Linux e Windows. Para rodar sem instalar Python nem ODBC, use
+iniciar.sh (Linux/macOS) ou iniciar.bat (Windows), que rodam este script em um container.
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -34,15 +37,21 @@ def main() -> None:
     ap.add_argument("--pular-extracao", action="store_true")
     ap.add_argument("--sem-tsql", action="store_true")
     ap.add_argument("--forcar", action="store_true")
+    ap.add_argument("--sem-docker", action="store_true",
+                    help="não sobe o SQL Server (ele já está no ar, por exemplo no docker compose)")
     args = ap.parse_args()
 
-    if not (BASE_DIR / ".env").exists():
+    # No container a senha chega por variável de ambiente, sem arquivo .env
+    if not (BASE_DIR / ".env").exists() and not os.getenv("MSSQL_SA_PASSWORD"):
         raise SystemExit("[ERRO] Arquivo .env não encontrado. Copie .env.example para .env (veja o README).")
-    if shutil.which("docker") is None:
-        raise SystemExit("[ERRO] Docker não encontrado. Instale o Docker (veja o README) e tente de novo.")
 
     py = sys.executable
-    rodar(["docker", "compose", "up", "-d", "sqlserver"], "1/4 Subindo o SQL Server (Docker)")
+    if args.sem_docker:
+        print("\n########## 1/4 SQL Server já em execução (--sem-docker) ##########")
+    else:
+        if shutil.which("docker") is None:
+            raise SystemExit("[ERRO] Docker não encontrado. Instale o Docker (veja o README) e tente de novo.")
+        rodar(["docker", "compose", "up", "-d", "sqlserver"], "1/4 Subindo o SQL Server (Docker)")
 
     if not args.pular_extracao:
         cmd = [py, str(PIPELINES / "01_extract_tse.py")] + (["--forcar"] if args.forcar else [])

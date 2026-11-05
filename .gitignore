@@ -24,3 +24,10 @@ data/mssql/
 
 # DBeaver
 .dbeaver/
+
+# Power BI Project: cache e configurações locais do Desktop
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Ajustes do docker compose de cada máquina (ex.: rede do WinBoat)
+docker-compose.override.yml

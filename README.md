@@ -30,17 +30,57 @@ Escopo desta versão: **somente 2022**, rodando 100% na máquina local.
 
 ---
 
-## Pré-requisitos
+## Início rápido (recomendado)
+
+O único programa necessário é o **Docker**. Python, `uv` e o ODBC Driver 18 rodam dentro de um container,
+e o script de início instala ou configura o que faltar.
+
+**1. Baixe o projeto:** `git clone https://github.com/FernandaFon/projeto_tse.git` ou, sem Git,
+**Code → Download ZIP** no GitHub e extraia a pasta.
+
+**2. Rode o script de início:**
+
+| Windows | Linux / macOS |
+|---|---|
+| Dê **duplo clique** em `iniciar.bat` | No terminal, dentro da pasta: `./iniciar.sh` |
+
+O script faz, em ordem:
+
+1. confere o Docker e, se faltar, oferece instalar (Windows: WSL 2 e Docker Desktop pelo `winget`;
+   Linux: script oficial da Docker ou `pacman`; macOS: indica o Docker Desktop);
+2. inicia o Docker se ele estiver parado;
+3. cria o `.env` com uma senha forte aleatória, se ele ainda não existir;
+4. sobe o SQL Server e espera ele ficar pronto;
+5. roda o pipeline inteiro no container: extração, carga e T-SQL.
+
+A primeira execução leva de 30 a 60 minutos (cerca de 3 GB de downloads do TSE e 20 milhões de linhas carregadas).
+As seguintes reaproveitam downloads, Parquet e tabelas já carregadas. Reserve uns 10 GB livres em disco.
+
+Opções (as mesmas nos dois sistemas):
+
+```bash
+./iniciar.sh --pular-extracao   # iniciar.bat --pular-extracao : reaproveita data/silver
+./iniciar.sh --sem-tsql         # iniciar.bat --sem-tsql       : para depois da carga em stg
+./iniciar.sh --forcar           # iniciar.bat --forcar         : baixa e refaz tudo
+```
+
+Depois de pronto, conecte no banco em `localhost`, porta `1433`, banco `tse_warehouse`, usuário `sa` e a senha do `.env`
+(veja [Conectando pelo DBeaver](#conectando-pelo-dbeaver)). Para parar o SQL Server: `docker compose stop`.
+
+---
+
+## Modo desenvolvedor (Python na sua máquina)
+
+Para alterar e depurar os scripts Python fora do container, instale também o `uv` e o ODBC Driver 18.
+Os scripts SQL e Python são lidos direto da pasta do projeto nos dois modos, então para mudanças só em `sql/` o
+`iniciar` já basta.
 
 | Ferramenta | Para quê | Observação |
 |---|---|---|
-| [Git](https://git-scm.com/downloads) | clonar o repositório | |
-| [uv](https://docs.astral.sh/uv/) | Python e dependências | o `uv` instala a versão certa do Python sozinho |
 | [Docker](https://docs.docker.com/get-started/get-docker/) com Compose v2 | SQL Server | comando `docker compose` (com espaço) |
+| [uv](https://docs.astral.sh/uv/) | Python e dependências | o `uv` instala a versão certa do Python sozinho |
 | **ODBC Driver 18 for SQL Server** | o `pyodbc` conversar com o banco | **não é instalado pelo `uv`**, é um programa do sistema |
 | [DBeaver](https://dbeaver.io/download/) (opcional) | explorar o banco | |
-
-Espaço em disco: reserve alguns GB livres (ZIPs do TSE + Parquet + volume do SQL Server). O arquivo de Presidente (`..._BR.zip`) é o mais pesado.
 
 ### Instalação no Windows
 
@@ -80,16 +120,9 @@ Espaço em disco: reserve alguns GB livres (ZIPs do TSE + Parquet + volume do SQ
    odbcinst -q -d
    ```
 
----
+### Rodando
 
-## Primeira execução
-
-```bash
-git clone https://github.com/FernandaFon/projeto_tse.git
-cd projeto_tse
-```
-
-**1. Crie o arquivo `.env`** com a senha do banco (ele **não** vai para o Git):
+Crie o `.env` (ou rode o `iniciar` uma vez, que cria sozinho):
 
 | Linux / macOS | Windows (PowerShell) |
 |---|---|
@@ -98,29 +131,21 @@ cd projeto_tse
 Abra o `.env` e troque `MSSQL_SA_PASSWORD`. Regra do SQL Server: mínimo de 8 caracteres, com pelo menos 3 entre
 maiúscula, minúscula, número e símbolo. Evite o caractere `$`.
 
-**2. Instale as dependências:**
-
 ```bash
-uv sync
-```
-
-**3. Rode tudo de uma vez** (sobe o Docker, extrai, carrega e roda o T-SQL):
-
-```bash
-uv run pipelines/run_all.py
+uv sync                                   # instala as dependências
+uv run pipelines/run_all.py               # sobe o Docker, extrai, carrega e roda o T-SQL
 ```
 
 Ou rode etapa por etapa:
 
 ```bash
-docker compose up -d sqlserver            # sobe o SQL Server
-uv run pipelines/00_validar_bases.py      # (opcional) confere se as URLs do TSE respondem
+docker compose up -d --wait sqlserver     # sobe o SQL Server e espera ficar pronto
 uv run pipelines/01_extract_tse.py        # baixa e filtra as 4 capitais
-uv run pipelines/02_load_staging.py       # carrega em stg.* (espera o banco ficar pronto)
+uv run pipelines/02_load_staging.py       # carrega em stg.* (cria o banco e espera ele responder)
 uv run pipelines/03_run_tsql.py           # executa sql/*.sql em ordem
 ```
 
-As etapas podem ser repetidas à vontade: downloads e Parquet já existentes são reaproveitados e a carga recria as tabelas `stg`.
+As etapas podem ser repetidas à vontade: downloads e Parquet já existentes são reaproveitados e a carga pula tabelas já completas.
 
 ### Opções úteis
 
@@ -136,7 +161,7 @@ uv run pipelines/03_run_tsql.py --listar           # mostra a ordem dos scripts 
 
 ## Bases utilizadas (2022)
 
-URLs começam com `https://cdn.tse.jus.br/estatistica/sead/odsele/`. O script `00_validar_bases.py` testa todas.
+URLs começam com `https://cdn.tse.jus.br/estatistica/sead/odsele/`.
 
 | Nº | Base | Arquivo(s) |
 |---|---|---|
@@ -177,6 +202,7 @@ sql/01_criar_schemas.sql
 sql/02_limpeza_stg.sql
 sql/03_dimensoes.sql
 sql/04_fatos.sql
+sql/05_views_bi.sql
 ```
 
 `03_run_tsql.py` divide cada arquivo nas linhas `GO` e executa um lote por vez. Se um lote falhar, a execução para e mostra o erro.
@@ -204,10 +230,11 @@ O **Power BI Desktop só roda no Windows**. Opções:
 
 | Sintoma | Causa provável e solução |
 |---|---|
-| `Can't open lib 'ODBC Driver 18 for SQL Server'` / `Data source name not found` | O driver ODBC não está instalado ou registrado. Refaça o passo do ODBC e confira com `odbcinst -q -d` (Linux). |
+| `Can't open lib 'ODBC Driver 18 for SQL Server'` / `Data source name not found` | Só no modo desenvolvedor: o driver ODBC não está instalado ou registrado. Refaça o passo do ODBC e confira com `odbcinst -q -d` (Linux), ou use o `iniciar`, que não precisa do driver. |
 | `Cannot connect to the Docker daemon` / `error during connect` | O Docker não está rodando. Windows: abra o Docker Desktop. Linux: `sudo systemctl start docker`. |
 | `permission denied` ao usar `docker` no Linux | Seu usuário não está no grupo `docker`: `sudo usermod -aG docker $USER` e faça logout/login. |
-| `MSSQL_SA_PASSWORD` não definida / compose reclama da variável | Falta o `.env`. Copie o `.env.example`. |
+| `MSSQL_SA_PASSWORD` não definida / compose reclama da variável | Falta o `.env`. Rode o `iniciar`, que cria um, ou copie o `.env.example`. |
+| Windows: o `iniciar.bat` para em "Docker Desktop instalado" ou "WSL instalado" | É esperado: reinicie o computador se pedido, abra o Docker Desktop uma vez (aceite os termos) e dê duplo clique no `iniciar.bat` de novo. |
 | Container reinicia sozinho e o log fala em senha | Senha fora da política do SQL Server. Use 8+ caracteres, com 3 tipos diferentes. Depois: `docker compose down -v` e suba de novo. |
 | `Login timeout expired` / `connection refused` | O banco ainda está subindo (leva de 10 a 30 s): o `02_load_staging.py` já espera até 120 s. Se persistir: `docker compose logs sqlserver`. |
 | `SSL Provider` / `certificate verify failed` | Falta `TrustServerCertificate=yes` (já está nos scripts) ou `trustServerCertificate=true` no DBeaver. |
@@ -222,19 +249,22 @@ O **Power BI Desktop só roda no Windows**. Opções:
 
 ```
 .
-├── docker-compose.yml     SQL Server 2022 (e Metabase opcional)
-├── .env.example           modelo de configuração (copie para .env)
+├── iniciar.sh / iniciar.bat   início rápido: configura o ambiente e roda tudo
+├── scripts/iniciar.ps1    lógica do iniciar.bat (PowerShell)
+├── Dockerfile             imagem do pipeline (Python + uv + ODBC Driver 18)
+├── docker-compose.yml     SQL Server 2022 e serviço do pipeline
+├── .env.example           modelo de configuração (o iniciar cria o .env)
 ├── pyproject.toml / uv.lock
 ├── pipelines/
 │   ├── config.py              caminhos, banco e catálogo de bases
 │   ├── tse_io.py              download, filtro e Parquet
-│   ├── 00_validar_bases.py    confere URLs e colunas das bases do TSE
 │   ├── 01_extract_tse.py      extração (bronze -> silver)
 │   ├── 02_load_staging.py     carga no SQL Server (stg)
 │   ├── 03_run_tsql.py         executa sql/*.sql
 │   └── run_all.py             roda tudo
 ├── sql/                   scripts T-SQL numerados
-├── docs/                  relatórios de validação e documentação
+├── docs/                  Termo de Abertura e conferências (conferencias.sql)
+├── powerbi/               dashboard (Power BI Project, .pbip)
 └── data/                  (fora do Git) bronze, silver
 ```
 
