@@ -41,7 +41,8 @@
                 }
               },
               "queryRef": "DIM_SECAO.Quartil de tamanho",
-              "nativeQueryRef": "Quartil de tamanho"
+              "nativeQueryRef": "Quartil de tamanho",
+              "displayName": "Quartil"
             },
             {
               "field": {
@@ -55,7 +56,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.Seções consideradas",
-              "nativeQueryRef": "Seções consideradas"
+              "nativeQueryRef": "Seções consideradas",
+              "displayName": "Seções"
             },
             {
               "field": {
@@ -69,7 +71,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.Aptos médios por seção",
-              "nativeQueryRef": "Aptos médios por seção"
+              "nativeQueryRef": "Aptos médios por seção",
+              "displayName": "Aptos médios"
             },
             {
               "field": {
@@ -83,11 +86,106 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.Taxa de abstenção (seção) · K1",
-              "nativeQueryRef": "Taxa de abstenção (seção) · K1"
+              "nativeQueryRef": "Taxa de abstenção (seção) · K1",
+              "displayName": "Abstenção K1"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "216.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_MUNICIPIO.Capital"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_SECAO.Quartil de tamanho"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.Seções consideradas"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.Aptos médios por seção"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.Taxa de abstenção (seção) · K1"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

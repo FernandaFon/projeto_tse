@@ -73,17 +73,23 @@ table FATO_DETALHE_ZONA
 		formatString: 0
 		lineageTag: 92e16ac7-60b0-59db-9a7c-6f1c6620ce39
 
-	measure 'Aptos · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Aptos (zona)])
+	measure 'Aptos · Top 20 (Q5)' =
+			SUMX(FILTER(VALUES(DIM_ZONA[Zona (capital)]),
+			            VAR _p = [Posição Q5] RETURN NOT ISBLANK(_p) && _p <= 20),
+			     [Aptos (zona)])
 		formatString: #,0
 		lineageTag: 6639ff6c-a54f-52f4-94c2-2200d7b671dc
 
-	measure 'Taxa de abstenção · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Taxa de abstenção (zona) · K1])
-		formatString: 0.0%;-0.0%;0.0%
-		lineageTag: 44f27e4e-d9ac-59df-8465-ff2f1bca9b22
-
-	measure 'Abstenções · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Abstenções (zona) · K6])
+	measure 'Abstenções · Top 20 (Q5)' =
+			SUMX(FILTER(VALUES(DIM_ZONA[Zona (capital)]),
+			            VAR _p = [Posição Q5] RETURN NOT ISBLANK(_p) && _p <= 20),
+			     [Abstenções (zona) · K6])
 		formatString: #,0
 		lineageTag: 2eb13c7c-48df-5e1b-8bd6-f7ef472160e8
+
+	measure 'Taxa de abstenção · Top 20 (Q5)' = DIVIDE([Abstenções · Top 20 (Q5)], [Aptos · Top 20 (Q5)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 44f27e4e-d9ac-59df-8465-ff2f1bca9b22
 
 	column sk_eleicao
 		dataType: int64

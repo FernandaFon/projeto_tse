@@ -25,9 +25,12 @@ table FATO_VOTACAO_CANDIDATO_ZONA
 		formatString: 0
 		lineageTag: 3cc2c8ed-2a4d-535a-ba18-ad4f6bd94e6b
 
+	/// Só por zona: no total fica vazio.
 	measure 'Zona de disputa?' =
 			VAR _m = [Margem de competitividade (p.p.) · K4]
-			RETURN IF(NOT ISBLANK(_m), IF(_m < [Limite de disputa (p.p.)], "Sim", "Não"))
+			RETURN
+			    IF(ISINSCOPE(DIM_ZONA[Zona (capital)]) && NOT ISBLANK(_m),
+			       IF(_m < [Limite de disputa (p.p.)], "Sim", "Não"))
 		lineageTag: fe063110-ac3d-5510-834a-bcee300b48ad
 
 	measure 'Zonas de disputa' =

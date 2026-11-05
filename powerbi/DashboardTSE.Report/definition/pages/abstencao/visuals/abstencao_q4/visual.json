@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_ZONA.Zona (capital)",
-              "nativeQueryRef": "Zona (capital)"
+              "nativeQueryRef": "Zona (capital)",
+              "displayName": "Zona"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 60–69 · K7",
-              "nativeQueryRef": "Comparecimento 60–69 · K7"
+              "nativeQueryRef": "Comparecimento 60–69 · K7",
+              "displayName": "Comparec. 60–69"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 70+ · K7",
-              "nativeQueryRef": "Comparecimento 70+ · K7"
+              "nativeQueryRef": "Comparecimento 70+ · K7",
+              "displayName": "Comparec. 70+"
             }
           ]
         }
@@ -78,6 +81,72 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "136.8D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_ZONA.Zona (capital)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "121.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 60–69 · K7"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "121.6D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 70+ · K7"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

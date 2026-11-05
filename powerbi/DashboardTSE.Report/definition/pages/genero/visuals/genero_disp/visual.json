@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_ZONA.Zona (capital)",
-              "nativeQueryRef": "Zona (capital)"
+              "nativeQueryRef": "Zona (capital)",
+              "displayName": "Zona"
             }
           ]
         },
@@ -83,7 +84,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Q3 · Mulheres no comparecimento × participação do partido, por zona'"
+                  "Value": "'Q3 · Mulheres no comparecimento × participação do partido (escolha um partido)'"
                 }
               }
             }

@@ -45,7 +45,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.K2b · alta escolaridade (Q6)",
-              "nativeQueryRef": "K2b · alta escolaridade (Q6)"
+              "nativeQueryRef": "K2b · alta escolaridade (Q6)",
+              "displayName": "Seções de alta escolaridade"
             },
             {
               "field": {
@@ -59,7 +60,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.Taxa de brancos e nulos (seção) · K2b",
-              "nativeQueryRef": "Taxa de brancos e nulos (seção) · K2b"
+              "nativeQueryRef": "Taxa de brancos e nulos (seção) · K2b",
+              "displayName": "Todas as seções"
             }
           ]
         }
@@ -112,7 +114,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Q6 · Brancos e nulos: seções de alta escolaridade × todas'"
+                  "Value": "'Q6 · Brancos e nulos (K2b): seções de alta escolaridade × todas'"
                 }
               }
             }

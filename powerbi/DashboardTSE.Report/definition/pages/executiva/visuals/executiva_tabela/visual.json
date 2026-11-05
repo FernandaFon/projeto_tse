@@ -41,7 +41,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Aptos (zona)",
-              "nativeQueryRef": "Aptos (zona)"
+              "nativeQueryRef": "Aptos (zona)",
+              "displayName": "Aptos"
             },
             {
               "field": {
@@ -55,7 +56,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Comparecimento (zona)",
-              "nativeQueryRef": "Comparecimento (zona)"
+              "nativeQueryRef": "Comparecimento (zona)",
+              "displayName": "Comparec."
             },
             {
               "field": {
@@ -69,7 +71,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Abstenções (zona) · K6",
-              "nativeQueryRef": "Abstenções (zona) · K6"
+              "nativeQueryRef": "Abstenções (zona) · K6",
+              "displayName": "Abstenções K6"
             },
             {
               "field": {
@@ -83,7 +86,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Taxa de abstenção (zona) · K1",
-              "nativeQueryRef": "Taxa de abstenção (zona) · K1"
+              "nativeQueryRef": "Taxa de abstenção (zona) · K1",
+              "displayName": "Abstenção K1"
             },
             {
               "field": {
@@ -97,7 +101,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Votos válidos (zona)",
-              "nativeQueryRef": "Votos válidos (zona)"
+              "nativeQueryRef": "Votos válidos (zona)",
+              "displayName": "Válidos"
             },
             {
               "field": {
@@ -111,7 +116,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Taxa de brancos e nulos (zona) · K2b",
-              "nativeQueryRef": "Taxa de brancos e nulos (zona) · K2b"
+              "nativeQueryRef": "Taxa de brancos e nulos (zona) · K2b",
+              "displayName": "Brancos e nulos K2b"
             },
             {
               "field": {
@@ -125,7 +131,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Engajamento global · K8",
-              "nativeQueryRef": "Engajamento global · K8"
+              "nativeQueryRef": "Engajamento global · K8",
+              "displayName": "Engajam. K8"
             },
             {
               "field": {
@@ -139,7 +146,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Válidos por abstenção · K9",
-              "nativeQueryRef": "Válidos por abstenção · K9"
+              "nativeQueryRef": "Válidos por abstenção · K9",
+              "displayName": "Válidos/abst. K9"
             }
           ]
         }
@@ -162,6 +170,156 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "220.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_MUNICIPIO.Capital"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Aptos (zona)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Comparecimento (zona)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Abstenções (zona) · K6"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Taxa de abstenção (zona) · K1"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Votos válidos (zona)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Taxa de brancos e nulos (zona) · K2b"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Engajamento global · K8"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "60.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Válidos por abstenção · K9"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

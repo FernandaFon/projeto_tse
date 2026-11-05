@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_ZONA.Zona (capital)",
-              "nativeQueryRef": "Zona (capital)"
+              "nativeQueryRef": "Zona (capital)",
+              "displayName": "Zona"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Eleitorado feminino ativo · K3",
-              "nativeQueryRef": "Eleitorado feminino ativo · K3"
+              "nativeQueryRef": "Eleitorado feminino ativo · K3",
+              "displayName": "Mulheres K3"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_PARTIDO_ZONA.Participação do partido nos válidos",
-              "nativeQueryRef": "Participação do partido nos válidos"
+              "nativeQueryRef": "Participação do partido nos válidos",
+              "displayName": "Partido nos válidos"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_PARTIDO_ZONA.Índice de legenda (zona) · K5",
-              "nativeQueryRef": "Índice de legenda (zona) · K5"
+              "nativeQueryRef": "Índice de legenda (zona) · K5",
+              "displayName": "Legenda K5"
             },
             {
               "field": {
@@ -83,7 +87,8 @@
                 }
               },
               "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Zona prioritária (Q3)",
-              "nativeQueryRef": "Zona prioritária (Q3)"
+              "nativeQueryRef": "Zona prioritária (Q3)",
+              "displayName": "Prioritária?"
             }
           ]
         }
@@ -106,6 +111,100 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "216.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_ZONA.Zona (capital)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_PERFIL_COMPARECIMENTO_ZONA.Eleitorado feminino ativo · K3"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_PARTIDO_ZONA.Participação do partido nos válidos"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_PARTIDO_ZONA.Índice de legenda (zona) · K5"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "96.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_PERFIL_COMPARECIMENTO_ZONA.Zona prioritária (Q3)"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

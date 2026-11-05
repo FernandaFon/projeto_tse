@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_SECAO.Seção (capital/zona)",
-              "nativeQueryRef": "Seção (capital/zona)"
+              "nativeQueryRef": "Seção (capital/zona)",
+              "displayName": "Seção"
             }
           ]
         },

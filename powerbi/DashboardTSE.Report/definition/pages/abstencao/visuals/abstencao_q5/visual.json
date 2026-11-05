@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_ZONA.Zona (capital)",
-              "nativeQueryRef": "Zona (capital)"
+              "nativeQueryRef": "Zona (capital)",
+              "displayName": "Zona"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Aptos · Top 20 (Q5)",
-              "nativeQueryRef": "Aptos · Top 20 (Q5)"
+              "nativeQueryRef": "Aptos · Top 20 (Q5)",
+              "displayName": "Aptos"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Taxa de abstenção · Top 20 (Q5)",
-              "nativeQueryRef": "Taxa de abstenção · Top 20 (Q5)"
+              "nativeQueryRef": "Taxa de abstenção · Top 20 (Q5)",
+              "displayName": "Abstenção"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_ZONA.Abstenções · Top 20 (Q5)",
-              "nativeQueryRef": "Abstenções · Top 20 (Q5)"
+              "nativeQueryRef": "Abstenções · Top 20 (Q5)",
+              "displayName": "Abstenções"
             }
           ]
         }
@@ -92,6 +96,86 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "140.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_ZONA.Zona (capital)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Aptos · Top 20 (Q5)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Taxa de abstenção · Top 20 (Q5)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "83.2D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_ZONA.Abstenções · Top 20 (Q5)"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

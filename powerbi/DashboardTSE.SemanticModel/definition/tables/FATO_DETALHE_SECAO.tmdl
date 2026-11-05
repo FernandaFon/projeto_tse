@@ -55,7 +55,8 @@ table FATO_DETALHE_SECAO
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: d0a81267-809b-5961-9d3b-543b08dea0a8
 
-	measure '% sem médio da seção · K11a' = MAX(DIM_SECAO[% sem médio completo · K11a])
+	/// Atributo da seção: vazio em totais.
+	measure '% sem médio da seção · K11a' = IF(HASONEVALUE(DIM_SECAO[sk_secao]), MAX(DIM_SECAO[% sem médio completo · K11a]))
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: b8791858-ed7c-564a-861f-de3fdb8ddfec
 

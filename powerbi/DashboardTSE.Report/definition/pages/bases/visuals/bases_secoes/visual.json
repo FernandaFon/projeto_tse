@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_SECAO.Seção (capital/zona)",
-              "nativeQueryRef": "Seção (capital/zona)"
+              "nativeQueryRef": "Seção (capital/zona)",
+              "displayName": "Seção"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_SECAO_PARTIDO.Votos de legenda (seção)",
-              "nativeQueryRef": "Votos de legenda (seção)"
+              "nativeQueryRef": "Votos de legenda (seção)",
+              "displayName": "Legenda"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_SECAO_PARTIDO.Votos válidos (seção)",
-              "nativeQueryRef": "Votos válidos (seção)"
+              "nativeQueryRef": "Votos válidos (seção)",
+              "displayName": "Válidos"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_SECAO_PARTIDO.Índice de legenda (seção) · K5",
-              "nativeQueryRef": "Índice de legenda (seção) · K5"
+              "nativeQueryRef": "Índice de legenda (seção) · K5",
+              "displayName": "Índice K5"
             }
           ]
         }
@@ -92,6 +96,86 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "212.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_SECAO.Seção (capital/zona)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_SECAO_PARTIDO.Votos de legenda (seção)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_SECAO_PARTIDO.Votos válidos (seção)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_SECAO_PARTIDO.Índice de legenda (seção) · K5"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

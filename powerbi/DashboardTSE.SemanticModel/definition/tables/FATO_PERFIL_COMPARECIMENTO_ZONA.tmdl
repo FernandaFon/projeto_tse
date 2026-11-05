@@ -57,7 +57,7 @@ table FATO_PERFIL_COMPARECIMENTO_ZONA
 			VAR _k3 = [Eleitorado feminino ativo · K3]
 			VAR _part = [Participação do partido nos válidos]
 			RETURN
-			    IF(NOT ISBLANK(_cap) && NOT ISBLANK(_k3),
+			    IF(NOT ISBLANK(_cap) && NOT ISBLANK(_k3) && NOT ISBLANK(_part),
 			        IF(_k3 >= _p75 && _part <= _p25, "Sim", "Não"))
 		lineageTag: 9c9b8140-ebd8-5af8-b256-6403b4f4a36c
 

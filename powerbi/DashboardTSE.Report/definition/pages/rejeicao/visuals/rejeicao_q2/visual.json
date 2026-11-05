@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_SECAO.Seção (capital/zona)",
-              "nativeQueryRef": "Seção (capital/zona)"
+              "nativeQueryRef": "Seção (capital/zona)",
+              "displayName": "Seção"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.K11a · baixa escolaridade (Q2)",
-              "nativeQueryRef": "K11a · baixa escolaridade (Q2)"
+              "nativeQueryRef": "K11a · baixa escolaridade (Q2)",
+              "displayName": "% sem médio K11a"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.K2 · baixa escolaridade (Q2)",
-              "nativeQueryRef": "K2 · baixa escolaridade (Q2)"
+              "nativeQueryRef": "K2 · baixa escolaridade (Q2)",
+              "displayName": "Brancos e nulos K2"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FATO_DETALHE_SECAO.K2b · baixa escolaridade (Q2)",
-              "nativeQueryRef": "K2b · baixa escolaridade (Q2)"
+              "nativeQueryRef": "K2b · baixa escolaridade (Q2)",
+              "displayName": "Taxa K2b"
             }
           ]
         }
@@ -92,6 +96,86 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "212.4D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_SECAO.Seção (capital/zona)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.K11a · baixa escolaridade (Q2)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.K2 · baixa escolaridade (Q2)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.9D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_DETALHE_SECAO.K2b · baixa escolaridade (Q2)"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

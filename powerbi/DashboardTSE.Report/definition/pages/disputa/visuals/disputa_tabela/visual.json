@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "DIM_ZONA.Zona (capital)",
-              "nativeQueryRef": "Zona (capital)"
+              "nativeQueryRef": "Zona (capital)",
+              "displayName": "Zona"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Margem de competitividade (p.p.) · K4",
-              "nativeQueryRef": "Margem de competitividade (p.p.) · K4"
+              "nativeQueryRef": "Margem de competitividade (p.p.) · K4",
+              "displayName": "Margem K4"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Zona de disputa?",
-              "nativeQueryRef": "Zona de disputa?"
+              "nativeQueryRef": "Zona de disputa?",
+              "displayName": "Disputa?"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Votos nominais válidos (candidato)",
-              "nativeQueryRef": "Votos nominais válidos (candidato)"
+              "nativeQueryRef": "Votos nominais válidos (candidato)",
+              "displayName": "Votos válidos"
             }
           ]
         }
@@ -92,6 +96,86 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "216.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "DIM_ZONA.Zona (capital)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_CANDIDATO_ZONA.Margem de competitividade (p.p.) · K4"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_CANDIDATO_ZONA.Zona de disputa?"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "128.0D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "FATO_VOTACAO_CANDIDATO_ZONA.Votos nominais válidos (candidato)"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

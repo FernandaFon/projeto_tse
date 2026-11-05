@@ -19,7 +19,11 @@ table FATO_VOTACAO_PARTIDO_ZONA
 		lineageTag: a904b165-9534-5b99-85f9-4678d1188ba8
 
 	/// Votos válidos do(s) partido(s) selecionado(s) ÷ votos válidos de todos os partidos.
-	measure 'Participação do partido nos válidos' = DIVIDE([Votos válidos do partido (zona)], CALCULATE([Votos válidos do partido (zona)], ALL(DIM_AGREMIACAO)))
+	measure 'Participação do partido nos válidos' =
+			-- Sem partido escolhido no seletor seria sempre 100%: fica vazio
+			IF(ISFILTERED(DIM_AGREMIACAO[Partido]),
+			    DIVIDE([Votos válidos do partido (zona)],
+			           CALCULATE([Votos válidos do partido (zona)], ALL(DIM_AGREMIACAO))))
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: 86163335-b79e-5874-9e5f-33d62d4d4e2b
 
