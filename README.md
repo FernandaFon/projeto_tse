@@ -54,7 +54,8 @@ O script faz, em ordem:
 5. roda o pipeline inteiro no container: extração, carga e T-SQL.
 
 A primeira execução leva de 30 a 60 minutos (cerca de 3 GB de downloads do TSE e 20 milhões de linhas carregadas).
-As seguintes reaproveitam downloads, Parquet e tabelas já carregadas. Reserve uns 10 GB livres em disco.
+As seguintes reaproveitam downloads, Parquet e tabelas já carregadas. Reserve uns 25 GB livres em disco
+(cerca de 3 GB de ZIPs do TSE, 16 GB do banco e 3 GB de imagens Docker).
 
 Opções (as mesmas nos dois sistemas):
 
