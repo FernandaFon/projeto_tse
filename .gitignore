@@ -31,3 +31,7 @@ data/mssql/
 
 # Ajustes do docker compose de cada máquina (ex.: rede do WinBoat)
 docker-compose.override.yml
+
+# Claude Code: notas e permissões locais de cada máquina
+CLAUDE.local.md
+.claude/settings.local.json
