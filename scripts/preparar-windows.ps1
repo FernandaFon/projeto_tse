@@ -58,7 +58,8 @@ $pacotes = @(
 foreach ($p in $pacotes) {
     if (Get-Command $p.cmd -ErrorAction SilentlyContinue) { Ok "$($p.nome) já instalado"; continue }
     Write-Host "Instalando $($p.nome)..."
-    winget install -e --id $p.id --accept-package-agreements --accept-source-agreements
+    # --source winget: a fonte msstore falha com erro de certificado em algumas VMs (ex.: WinBoat)
+    winget install -e --id $p.id --source winget --accept-package-agreements --accept-source-agreements
     if ($LASTEXITCODE -ne 0) { Falhar "Falha ao instalar $($p.nome) (código $LASTEXITCODE)." }
     Atualizar-Path
     Ok "$($p.nome) instalado"

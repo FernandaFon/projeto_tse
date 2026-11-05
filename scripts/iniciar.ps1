@@ -52,7 +52,8 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     if (-not (Confirmar "Instalar o Docker Desktop agora com o winget?")) {
         Falhar "Instale o Docker Desktop (https://docs.docker.com/desktop/setup/install/windows-install/) e rode o iniciar.bat de novo."
     }
-    winget install -e --id Docker.DockerDesktop --accept-package-agreements --accept-source-agreements
+    # --source winget: a fonte msstore falha com erro de certificado em algumas VMs
+    winget install -e --id Docker.DockerDesktop --source winget --accept-package-agreements --accept-source-agreements
     if ($LASTEXITCODE -ne 0) { Falhar "A instalação do Docker Desktop falhou (código $LASTEXITCODE)." }
     Aviso "Docker Desktop instalado. Se o instalador pedir, reinicie o computador. Depois rode o iniciar.bat de novo."
     exit 0  # esta janela ainda não enxerga o comando docker no PATH
