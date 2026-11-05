@@ -1,0 +1,146 @@
+table FATO_PERFIL_COMPARECIMENTO_ZONA
+	lineageTag: e5819465-6c33-538b-a961-06dec0be3f88
+
+	/// Base 11.
+	measure 'Aptos (perfil)' =
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN CALCULATE(SUM(FATO_PERFIL_COMPARECIMENTO_ZONA[qt_aptos]), DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: f8fb9651-e680-5905-8ebe-89ae102e1532
+
+	measure 'Comparecimento (perfil)' =
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN CALCULATE(SUM(FATO_PERFIL_COMPARECIMENTO_ZONA[qt_comparecimento]), DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: f42b92c1-f031-53c9-8b9f-34c9cfe31226
+
+	measure 'Abstenção (perfil)' =
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN CALCULATE(SUM(FATO_PERFIL_COMPARECIMENTO_ZONA[qt_abstencao]), DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 0b78521c-8a8c-5f8d-a351-e919d9fff614
+
+	/// K1: abstenções do perfil ÷ aptos do perfil.
+	measure 'Taxa de abstenção segmentada · K1' = DIVIDE([Abstenção (perfil)], [Aptos (perfil)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3d4b8272-6b52-5b9c-972a-75b4917cbaac
+
+	measure 'Aptos jovens 18–24' = CALCULATE([Aptos (perfil)], DIM_PERFIL[Jovem 18–24] = TRUE())
+		formatString: #,0
+		lineageTag: 5367a85d-bc35-5937-a76a-e2d17c7d19a7
+
+	measure 'Abstenção jovens 18–24 (Q1)' = CALCULATE([Taxa de abstenção segmentada · K1], DIM_PERFIL[Jovem 18–24] = TRUE())
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 41f01ea6-0f1c-5317-a558-4d821a97faf7
+
+	/// K7: comparecimento ÷ aptos, 60 a 69 anos (voto obrigatório).
+	measure 'Comparecimento 60–69 · K7' = CALCULATE(DIVIDE([Comparecimento (perfil)], [Aptos (perfil)]), DIM_PERFIL[60–69] = TRUE())
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f4b1c650-d07b-5931-b7c0-bc2b57c7ef68
+
+	/// K7: comparecimento ÷ aptos, 70 anos ou mais (voto facultativo).
+	measure 'Comparecimento 70+ · K7' = CALCULATE(DIVIDE([Comparecimento (perfil)], [Aptos (perfil)]), DIM_PERFIL[70 ou mais] = TRUE())
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2b59a992-25c7-5fe5-95ae-c04c798f6a74
+
+	/// K3: mulheres que compareceram ÷ total que compareceu.
+	measure 'Eleitorado feminino ativo · K3' = DIVIDE(CALCULATE([Comparecimento (perfil)], DIM_PERFIL[Feminino] = TRUE()), [Comparecimento (perfil)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 26b7329c-06b3-5a41-92de-a0de26824711
+
+	/// K3 ≥ P75 das zonas da capital e participação do partido ≤ P25 (Termo, pergunta 3).
+	measure 'Zona prioritária (Q3)' =
+			VAR _cap = SELECTEDVALUE(DIM_ZONA[sk_municipio])
+			VAR _zonas = CALCULATETABLE(VALUES(DIM_ZONA[sk_zona]), ALLSELECTED(DIM_ZONA), DIM_ZONA[sk_municipio] = _cap)
+			VAR _p75 = PERCENTILEX.INC(_zonas, [Eleitorado feminino ativo · K3], 0.75)
+			VAR _p25 = PERCENTILEX.INC(_zonas, [Participação do partido nos válidos], 0.25)
+			VAR _k3 = [Eleitorado feminino ativo · K3]
+			VAR _part = [Participação do partido nos válidos]
+			RETURN
+			    IF(NOT ISBLANK(_cap) && NOT ISBLANK(_k3),
+			        IF(_k3 >= _p75 && _part <= _p25, "Sim", "Não"))
+		lineageTag: 9c9b8140-ebd8-5af8-b256-6403b4f4a36c
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c6e2ee99-f74f-506c-8dda-491de69c3052
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 4d49e7ec-9e50-51ae-bf89-bad9c2cee8d6
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 9742cffc-af8c-5989-a837-29c794f98ac8
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_perfil
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 66dfd3bb-4a4b-5ff2-8838-2da929b5b676
+		summarizeBy: none
+		sourceColumn: sk_perfil
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_aptos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: e17e3051-cd47-5479-864e-f19381ec02b1
+		summarizeBy: none
+		sourceColumn: qt_aptos
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_comparecimento
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ccd635c8-2b2c-5df4-a582-eb3d900c7295
+		summarizeBy: none
+		sourceColumn: qt_comparecimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_abstencao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 63bdcbfc-6017-5e90-8b54-e96b573698f3
+		summarizeBy: none
+		sourceColumn: qt_abstencao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_PERFIL_COMPARECIMENTO_ZONA = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_PERFIL_COMPARECIMENTO_ZONA"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_municipio", "sk_zona", "sk_perfil", "qt_aptos", "qt_comparecimento", "qt_abstencao"})
+				in
+				    Colunas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

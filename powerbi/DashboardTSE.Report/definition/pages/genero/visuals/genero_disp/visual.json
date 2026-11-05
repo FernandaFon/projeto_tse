@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "genero_disp",
+  "position": {
+    "x": 10,
+    "y": 85,
+    "z": 10,
+    "height": 625,
+    "width": 620,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Eleitorado feminino ativo · K3"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Eleitorado feminino ativo · K3",
+              "nativeQueryRef": "Eleitorado feminino ativo · K3"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_PARTIDO_ZONA"
+                    }
+                  },
+                  "Property": "Participação do partido nos válidos"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_PARTIDO_ZONA.Participação do partido nos válidos",
+              "nativeQueryRef": "Participação do partido nos válidos"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q3 · Mulheres no comparecimento × participação do partido, por zona'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

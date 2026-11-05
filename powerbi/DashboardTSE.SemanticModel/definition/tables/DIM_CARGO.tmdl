@@ -1,0 +1,62 @@
+table DIM_CARGO
+	lineageTag: f7a9bbfd-74e3-5200-80ad-56051353b020
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 5e5accc1-6865-50c2-a4b4-17a246c8dc0b
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column cd_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c06dca81-7cdd-571c-9850-4f9c31e35894
+		summarizeBy: none
+		sourceColumn: cd_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cargo
+		dataType: string
+		lineageTag: adfda667-763b-51d9-9a66-7d2bc3db3b10
+		summarizeBy: none
+		sourceColumn: Cargo
+		sortByColumn: cd_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Majoritário'
+		dataType: boolean
+		lineageTag: e5ac2244-221f-5e53-b099-9cc350a4e437
+		summarizeBy: none
+		sourceColumn: Majoritário
+
+		annotation SummarizationSetBy = Automatic
+
+	column Proporcional
+		dataType: boolean
+		lineageTag: 8e992201-be24-5603-8123-06c5a1e56d4b
+		summarizeBy: none
+		sourceColumn: Proporcional
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CARGO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="DIM_CARGO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_cargo", "cd_cargo", "ds_cargo", "fl_majoritario", "fl_proporcional"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"ds_cargo", "Cargo"}, {"fl_majoritario", "Majoritário"}, {"fl_proporcional", "Proporcional"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

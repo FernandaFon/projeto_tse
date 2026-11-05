@@ -1,0 +1,111 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "executiva_barra",
+  "position": {
+    "x": 10,
+    "y": 185,
+    "z": 20,
+    "height": 525,
+    "width": 520,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_MUNICIPIO"
+                    }
+                  },
+                  "Property": "Capital"
+                }
+              },
+              "queryRef": "DIM_MUNICIPIO.Capital",
+              "nativeQueryRef": "Capital"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Engajamento global · K8"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Engajamento global · K8",
+              "nativeQueryRef": "Engajamento global · K8"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_DETALHE_ZONA"
+                  }
+                },
+                "Property": "Engajamento global · K8"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q10 · Engajamento global por capital (válidos ÷ aptos)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

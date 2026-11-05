@@ -1,0 +1,142 @@
+table FATO_VOTACAO_CANDIDATO_ZONA
+	lineageTag: beb7659d-ba43-5300-b8d2-c852d48c04db
+
+	/// Base 6.
+	measure 'Votos nominais válidos (candidato)' = SUM(FATO_VOTACAO_CANDIDATO_ZONA[qt_votos_nominais_validos])
+		formatString: #,0
+		lineageTag: 73471c72-4ec9-5f0f-82d8-1ff7882998f6
+
+	measure '% dos válidos (candidato)' = DIVIDE([Votos nominais válidos (candidato)], CALCULATE([Votos nominais válidos (candidato)], ALL(DIM_CANDIDATO)))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1ff1611f-9541-5dda-991c-173d8cfe4f79
+
+	/// K4: |% 1º colocado − % 2º colocado| sobre os votos válidos.
+	measure 'Margem de competitividade (p.p.) · K4' =
+			VAR _t = ADDCOLUMNS(SUMMARIZE(FATO_VOTACAO_CANDIDATO_ZONA, DIM_CANDIDATO[sk_candidato]),
+			                    "@v", CALCULATE(SUM(FATO_VOTACAO_CANDIDATO_ZONA[qt_votos_nominais_validos])))
+			VAR _total = SUMX(_t, [@v])
+			VAR _top2 = TOPN(2, _t, [@v], DESC)
+			RETURN
+			    IF(COUNTROWS(_top2) >= 2, 100 * DIVIDE(MAXX(_top2, [@v]) - MINX(_top2, [@v]), _total))
+		formatString: #,0.0" p.p."
+		lineageTag: 4940f61a-5a6e-5bfe-be70-d16a24f04dc4
+
+	measure 'Limite de disputa (p.p.)' = SELECTEDVALUE('Limite de disputa'[Limite (p.p.)], 5)
+		formatString: 0
+		lineageTag: 3cc2c8ed-2a4d-535a-ba18-ad4f6bd94e6b
+
+	measure 'Zona de disputa?' =
+			VAR _m = [Margem de competitividade (p.p.) · K4]
+			RETURN IF(NOT ISBLANK(_m), IF(_m < [Limite de disputa (p.p.)], "Sim", "Não"))
+		lineageTag: fe063110-ac3d-5510-834a-bcee300b48ad
+
+	measure 'Zonas de disputa' =
+			COUNTROWS(
+			    FILTER(VALUES(DIM_ZONA[sk_zona]),
+			        VAR _m = [Margem de competitividade (p.p.) · K4]
+			        RETURN NOT ISBLANK(_m) && _m < [Limite de disputa (p.p.)]))
+		formatString: #,0
+		lineageTag: 9319c06b-23e3-5576-b598-be3aeef4d9d1
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: b300b039-4912-5d74-841f-c169e7b7aad7
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c210179f-1345-50a2-a90b-5c4b687db42e
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 73f843f2-73f3-5ad0-a909-ddf225a32da7
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c4d558c5-6da5-510b-82c4-e90cb32e9b9d
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_candidato
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 63d8cbd1-4297-52cb-a673-4c7771707892
+		summarizeBy: none
+		sourceColumn: sk_candidato
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_agremiacao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3c293c43-d158-5503-9af7-d41a5a9e1a77
+		summarizeBy: none
+		sourceColumn: sk_agremiacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nominais
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d70fdfbe-fe3f-5aa4-bdae-d5616a19a695
+		summarizeBy: none
+		sourceColumn: qt_votos_nominais
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nominais_validos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: f861a604-f3e5-5774-96d7-6685062c57e5
+		summarizeBy: none
+		sourceColumn: qt_votos_nominais_validos
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situação no turno'
+		dataType: string
+		lineageTag: 3fafd106-c9bd-535c-a836-731009a7011d
+		summarizeBy: none
+		sourceColumn: Situação no turno
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_VOTACAO_CANDIDATO_ZONA = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_VOTACAO_CANDIDATO_ZONA"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_cargo", "sk_municipio", "sk_zona", "sk_candidato", "sk_agremiacao", "qt_votos_nominais", "qt_votos_nominais_validos", "ds_sit_tot_turno"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"ds_sit_tot_turno", "Situação no turno"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

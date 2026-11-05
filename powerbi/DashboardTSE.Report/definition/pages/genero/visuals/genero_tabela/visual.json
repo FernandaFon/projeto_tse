@@ -1,0 +1,134 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "genero_tabela",
+  "position": {
+    "x": 640,
+    "y": 85,
+    "z": 11,
+    "height": 625,
+    "width": 630,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Eleitorado feminino ativo · K3"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Eleitorado feminino ativo · K3",
+              "nativeQueryRef": "Eleitorado feminino ativo · K3"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_PARTIDO_ZONA"
+                    }
+                  },
+                  "Property": "Participação do partido nos válidos"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_PARTIDO_ZONA.Participação do partido nos válidos",
+              "nativeQueryRef": "Participação do partido nos válidos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_PARTIDO_ZONA"
+                    }
+                  },
+                  "Property": "Índice de legenda (zona) · K5"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_PARTIDO_ZONA.Índice de legenda (zona) · K5",
+              "nativeQueryRef": "Índice de legenda (zona) · K5"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Zona prioritária (Q3)"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Zona prioritária (Q3)",
+              "nativeQueryRef": "Zona prioritária (Q3)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                  }
+                },
+                "Property": "Eleitorado feminino ativo · K3"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Zonas: K3 alto (≥ P75) e partido fraco (≤ P25) = prioritária'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,227 @@
+table FATO_DETALHE_SECAO
+	lineageTag: 645aeed1-3c46-5ec2-b57b-9a1d298d6cd0
+
+	/// Base 8, sem seções não instaladas ou com zero aptos (regra 6.1).
+	measure 'Aptos (seção)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_SECAO[qt_aptos]), FATO_DETALHE_SECAO[considerar] = 1, DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 0da3acca-f8fc-596c-ba05-bf11b9149a51
+
+	measure 'Comparecimento (seção)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_SECAO[qt_comparecimento]), FATO_DETALHE_SECAO[considerar] = 1, DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 849dbe63-a8f5-5f15-8852-4f1d50d69631
+
+	measure 'Abstenções (seção)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_SECAO[qt_abstencoes]), FATO_DETALHE_SECAO[considerar] = 1, DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 7452ac49-7b0d-557c-87df-960a4e1f7714
+
+	measure 'Seções consideradas' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(COUNTROWS(FATO_DETALHE_SECAO), FATO_DETALHE_SECAO[considerar] = 1, DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: e5926b5d-357f-52dd-a117-7a43df9114de
+
+	measure 'Taxa de abstenção (seção) · K1' = DIVIDE([Abstenções (seção)], [Aptos (seção)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 50da5e49-a2e2-503d-8f2b-fa19bf84a160
+
+	measure 'Aptos médios por seção' = DIVIDE([Aptos (seção)], [Seções consideradas])
+		formatString: #,0
+		lineageTag: f5b1c64c-9676-5953-ae2a-1ffa4b14b9be
+
+	measure 'Brancos e nulos (seção) · K2' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_SECAO[qt_votos_brancos]) + SUM(FATO_DETALHE_SECAO[qt_votos_nulos]), FATO_DETALHE_SECAO[considerar] = 1, DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: f4e91b4a-c2b6-50fb-a0f4-26daae9192b9
+
+	/// K2b: (brancos + nulos) ÷ comparecimento.
+	measure 'Taxa de brancos e nulos (seção) · K2b' = DIVIDE([Brancos e nulos (seção) · K2], [Comparecimento (seção)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: d0a81267-809b-5961-9d3b-543b08dea0a8
+
+	measure '% sem médio da seção · K11a' = MAX(DIM_SECAO[% sem médio completo · K11a])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: b8791858-ed7c-564a-861f-de3fdb8ddfec
+
+	measure 'K11a · baixa escolaridade (Q2)' = CALCULATE([% sem médio da seção · K11a], DIM_SECAO[Baixa escolaridade] = "Sim")
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: aaf25658-7039-5c19-840e-d4102b521027
+
+	measure 'K2 · baixa escolaridade (Q2)' = CALCULATE([Brancos e nulos (seção) · K2], DIM_SECAO[Baixa escolaridade] = "Sim")
+		formatString: #,0
+		lineageTag: 9f5542f1-8321-535c-ae55-a426c438c3f6
+
+	measure 'K2b · baixa escolaridade (Q2)' = CALCULATE([Taxa de brancos e nulos (seção) · K2b], DIM_SECAO[Baixa escolaridade] = "Sim")
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: dbedb9fc-b515-57a1-bb33-94db157aee45
+
+	measure 'K2b · alta escolaridade (Q6)' = CALCULATE([Taxa de brancos e nulos (seção) · K2b], DIM_SECAO[Alta escolaridade] = "Sim")
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6f467c5a-f6dd-5af3-8959-ee5c03a8e6f4
+
+	column considerar = IF(FATO_DETALHE_SECAO[qt_aptos] > 0 && COALESCE(FATO_DETALHE_SECAO[fl_secao_instalada], TRUE()), 1, 0)
+		dataType: int64
+		isHidden
+		lineageTag: 1ef5f697-ff74-5294-9b50-7cdf20d53539
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: eac4db9d-d5e0-5e86-b459-7f8ba496b5d4
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8e0900ad-a823-56cb-addd-4d5222d3a884
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8b41b6e9-0894-53f2-97a8-25dd8bf16dfb
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: debbc9e7-cfb1-5393-8737-ca2308e04060
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_secao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 92b3eef0-5b40-5f7e-abaf-60009ca1f5da
+		summarizeBy: none
+		sourceColumn: sk_secao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_aptos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 4db6c445-3dd1-513e-b90b-58b57fb4c9b3
+		summarizeBy: none
+		sourceColumn: qt_aptos
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_comparecimento
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 01d3ea3c-4762-57cf-aed9-894c83042283
+		summarizeBy: none
+		sourceColumn: qt_comparecimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_abstencoes
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 220a112e-89df-54a7-ba1e-eb9bcce26827
+		summarizeBy: none
+		sourceColumn: qt_abstencoes
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nominais
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 92f3b2a2-f5ae-53ea-819f-06066775b9e8
+		summarizeBy: none
+		sourceColumn: qt_votos_nominais
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_legenda
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 00e6e842-1145-57c4-9c73-1c6a88c1a753
+		summarizeBy: none
+		sourceColumn: qt_votos_legenda
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_brancos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c201e435-1aa1-5497-a8de-434888772faa
+		summarizeBy: none
+		sourceColumn: qt_votos_brancos
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nulos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 1b9dd988-0186-5c66-beca-2a6de5fecf5d
+		summarizeBy: none
+		sourceColumn: qt_votos_nulos
+
+		annotation SummarizationSetBy = Automatic
+
+	column fl_secao_instalada
+		dataType: boolean
+		isHidden
+		lineageTag: 4fdca9d1-7af8-5cb5-9ace-6c3347e8de29
+		summarizeBy: none
+		sourceColumn: fl_secao_instalada
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_DETALHE_SECAO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_DETALHE_SECAO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_cargo", "sk_municipio", "sk_zona", "sk_secao", "qt_aptos", "qt_comparecimento", "qt_abstencoes", "qt_votos_nominais", "qt_votos_legenda", "qt_votos_brancos", "qt_votos_nulos", "fl_secao_instalada"})
+				in
+				    Colunas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

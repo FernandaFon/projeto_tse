@@ -1,0 +1,71 @@
+table DIM_ZONA
+	lineageTag: 7c96cbce-abb6-5a51-b24c-21b8083a9329
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 6e7e723b-26c0-5720-a0de-00892a79a627
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 64ad5194-1d09-51e3-bdf7-2dc60a1f0fef
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Zona
+		dataType: int64
+		formatString: 0
+		lineageTag: 608c70f6-9c1b-528d-b17d-804dae9990dc
+		summarizeBy: none
+		sourceColumn: Zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Zona (capital)'
+		dataType: string
+		lineageTag: c1b77eac-6863-54d5-b5d3-21182f43e0d7
+		summarizeBy: none
+		sourceColumn: Zona (capital)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Periferia
+		dataType: string
+		lineageTag: 76b385a0-a04c-5677-a424-a4c7eb16af94
+		summarizeBy: none
+		sourceColumn: Periferia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Distância ao centro (km)'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 9dfbbaf0-9088-561a-bec5-f213090f6fd1
+		summarizeBy: none
+		sourceColumn: Distância ao centro (km)
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_ZONA = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="VW_ZONA_BI"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_zona", "sk_municipio", "nr_zona", "ds_zona", "ds_periferia", "distancia_centro_km"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"nr_zona", "Zona"}, {"ds_zona", "Zona (capital)"}, {"ds_periferia", "Periferia"}, {"distancia_centro_km", "Distância ao centro (km)"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

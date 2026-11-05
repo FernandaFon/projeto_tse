@@ -1,0 +1,114 @@
+table FATO_VOTACAO_SECAO_PARTIDO
+	lineageTag: d900bff8-d70d-5002-9dec-281cb0c6e81b
+
+	/// Bases 1 a 4 e 9.
+	measure 'Votos (seção × partido)' = SUM(FATO_VOTACAO_SECAO_PARTIDO[qt_votos])
+		formatString: #,0
+		lineageTag: f079c9f1-1b1b-5f6f-91d5-bf88a7c72b26
+
+	measure 'Votos de legenda (seção)' = CALCULATE([Votos (seção × partido)], DIM_TIPO_VOTO[Tipo de voto] = "LEGENDA")
+		formatString: #,0
+		lineageTag: 6734e626-f652-5b64-aa19-d7cd93bb935f
+
+	measure 'Votos válidos (seção)' = CALCULATE([Votos (seção × partido)], DIM_TIPO_VOTO[Voto válido] = TRUE())
+		formatString: #,0
+		lineageTag: 82ad5190-b945-5f9f-84cd-9e7babc13781
+
+	/// K5 por seção: legenda ÷ (nominais + legenda).
+	measure 'Índice de legenda (seção) · K5' = DIVIDE([Votos de legenda (seção)], [Votos válidos (seção)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fc9d8f48-bc72-55fd-bf75-438956ca6069
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2d45702e-9ee7-5e03-9f81-b85207a44c36
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 051bd0e8-a9a9-562d-959d-e0248906afd3
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c97a8d95-f32e-5f69-afff-a1985e9b7bad
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8381f8fa-44d9-560a-a56e-3a9195991f5e
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_secao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: cbc85b82-9785-527b-bc4c-e60b1cb9871a
+		summarizeBy: none
+		sourceColumn: sk_secao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_agremiacao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d45cab4d-dd96-57d1-8e39-e03f4d724e68
+		summarizeBy: none
+		sourceColumn: sk_agremiacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_tipo_voto
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 63179250-95d8-58d8-ab17-597c159b25e7
+		summarizeBy: none
+		sourceColumn: sk_tipo_voto
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 03d3aa7b-92de-5824-a6db-718b8ed4c80b
+		summarizeBy: none
+		sourceColumn: qt_votos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_VOTACAO_SECAO_PARTIDO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_VOTACAO_SECAO_PARTIDO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_cargo", "sk_municipio", "sk_zona", "sk_secao", "sk_agremiacao", "sk_tipo_voto", "qt_votos"})
+				in
+				    Colunas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

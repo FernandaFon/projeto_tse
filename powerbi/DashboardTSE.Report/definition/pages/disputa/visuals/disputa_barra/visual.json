@@ -1,0 +1,111 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "disputa_barra",
+  "position": {
+    "x": 10,
+    "y": 185,
+    "z": 20,
+    "height": 525,
+    "width": 620,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Margem de competitividade (p.p.) · K4"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Margem de competitividade (p.p.) · K4",
+              "nativeQueryRef": "Margem de competitividade (p.p.) · K4"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                  }
+                },
+                "Property": "Margem de competitividade (p.p.) · K4"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q7 · Margem entre 1º e 2º colocados por zona (menor = mais disputada)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

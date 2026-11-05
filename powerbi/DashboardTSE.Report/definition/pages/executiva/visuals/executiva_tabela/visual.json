@@ -1,0 +1,190 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "executiva_tabela",
+  "position": {
+    "x": 540,
+    "y": 185,
+    "z": 21,
+    "height": 525,
+    "width": 730,
+    "tabOrder": 21
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_MUNICIPIO"
+                    }
+                  },
+                  "Property": "Capital"
+                }
+              },
+              "queryRef": "DIM_MUNICIPIO.Capital",
+              "nativeQueryRef": "Capital"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Aptos (zona)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Aptos (zona)",
+              "nativeQueryRef": "Aptos (zona)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Comparecimento (zona)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Comparecimento (zona)",
+              "nativeQueryRef": "Comparecimento (zona)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Abstenções (zona) · K6"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Abstenções (zona) · K6",
+              "nativeQueryRef": "Abstenções (zona) · K6"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Taxa de abstenção (zona) · K1"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Taxa de abstenção (zona) · K1",
+              "nativeQueryRef": "Taxa de abstenção (zona) · K1"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Votos válidos (zona)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Votos válidos (zona)",
+              "nativeQueryRef": "Votos válidos (zona)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Taxa de brancos e nulos (zona) · K2b"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Taxa de brancos e nulos (zona) · K2b",
+              "nativeQueryRef": "Taxa de brancos e nulos (zona) · K2b"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Engajamento global · K8"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Engajamento global · K8",
+              "nativeQueryRef": "Engajamento global · K8"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Válidos por abstenção · K9"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Válidos por abstenção · K9",
+              "nativeQueryRef": "Válidos por abstenção · K9"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_DETALHE_ZONA"
+                  }
+                },
+                "Property": "Engajamento global · K8"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Resumo por capital'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

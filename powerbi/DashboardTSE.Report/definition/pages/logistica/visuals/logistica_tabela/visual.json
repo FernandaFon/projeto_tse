@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "logistica_tabela",
+  "position": {
+    "x": 640,
+    "y": 85,
+    "z": 11,
+    "height": 300,
+    "width": 630,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_MUNICIPIO"
+                    }
+                  },
+                  "Property": "Capital"
+                }
+              },
+              "queryRef": "DIM_MUNICIPIO.Capital",
+              "nativeQueryRef": "Capital"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_SECAO"
+                    }
+                  },
+                  "Property": "Quartil de tamanho"
+                }
+              },
+              "queryRef": "DIM_SECAO.Quartil de tamanho",
+              "nativeQueryRef": "Quartil de tamanho"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Seções consideradas"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Seções consideradas",
+              "nativeQueryRef": "Seções consideradas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Aptos médios por seção"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Aptos médios por seção",
+              "nativeQueryRef": "Aptos médios por seção"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Taxa de abstenção (seção) · K1"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Taxa de abstenção (seção) · K1",
+              "nativeQueryRef": "Taxa de abstenção (seção) · K1"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tamanho médio e abstenção por quartil'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

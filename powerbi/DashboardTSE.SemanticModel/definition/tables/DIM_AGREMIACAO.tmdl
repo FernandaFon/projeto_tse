@@ -1,0 +1,68 @@
+table DIM_AGREMIACAO
+	lineageTag: 98a7ddb8-a1fc-544a-b44d-89482455d75e
+
+	column sk_agremiacao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 7f3397f6-bfc2-52c2-b096-153d45e3d73f
+		summarizeBy: none
+		sourceColumn: sk_agremiacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Partido
+		dataType: string
+		lineageTag: d1128346-0448-5391-9c6e-264dc0681a25
+		summarizeBy: none
+		sourceColumn: Partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome do partido'
+		dataType: string
+		lineageTag: ab01e291-d8f9-588c-a59a-a63475d4c727
+		summarizeBy: none
+		sourceColumn: Nome do partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Número do partido'
+		dataType: int64
+		formatString: 0
+		lineageTag: 96f85db6-6e8b-5b4b-888f-08016dceaab4
+		summarizeBy: none
+		sourceColumn: Número do partido
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Federação'
+		dataType: string
+		lineageTag: db14e0eb-4768-598a-8619-75c17767a1c6
+		summarizeBy: none
+		sourceColumn: Federação
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Partido do cliente'
+		dataType: boolean
+		lineageTag: e32dbe64-fa09-53c4-aef1-6a3d3fc74327
+		summarizeBy: none
+		sourceColumn: Partido do cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_AGREMIACAO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="DIM_AGREMIACAO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_agremiacao", "sg_partido", "nm_partido", "nr_partido", "sg_federacao", "fl_cliente"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"sg_partido", "Partido"}, {"nm_partido", "Nome do partido"}, {"nr_partido", "Número do partido"}, {"sg_federacao", "Federação"}, {"fl_cliente", "Partido do cliente"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

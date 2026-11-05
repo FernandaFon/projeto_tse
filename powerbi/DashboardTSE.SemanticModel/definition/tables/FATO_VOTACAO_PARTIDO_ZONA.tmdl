@@ -1,0 +1,108 @@
+table FATO_VOTACAO_PARTIDO_ZONA
+	lineageTag: 463879d1-4672-5c94-96db-091ca555ee50
+
+	/// Base 5.
+	measure 'Votos nominais do partido (zona)' = SUM(FATO_VOTACAO_PARTIDO_ZONA[qt_votos_nominais])
+		formatString: #,0
+		lineageTag: 48fe6b00-3a71-5862-a47f-ad1388b0ac74
+
+	measure 'Votos de legenda do partido (zona)' = SUM(FATO_VOTACAO_PARTIDO_ZONA[qt_votos_legenda])
+		formatString: #,0
+		lineageTag: c43cfa72-0218-522c-b8e1-e7eeac297796
+
+	measure 'Votos válidos do partido (zona)' = [Votos nominais do partido (zona)] + [Votos de legenda do partido (zona)]
+		formatString: #,0
+		lineageTag: 6a60d9a4-4fcb-5892-9664-9a01a06f0437
+
+	measure 'Índice de legenda (zona) · K5' = DIVIDE([Votos de legenda do partido (zona)], [Votos válidos do partido (zona)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a904b165-9534-5b99-85f9-4678d1188ba8
+
+	/// Votos válidos do(s) partido(s) selecionado(s) ÷ votos válidos de todos os partidos.
+	measure 'Participação do partido nos válidos' = DIVIDE([Votos válidos do partido (zona)], CALCULATE([Votos válidos do partido (zona)], ALL(DIM_AGREMIACAO)))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 86163335-b79e-5874-9e5f-33d62d4d4e2b
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2c8f44de-bfd1-5787-895b-75f7eb23ffff
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 21d726ee-8ef5-5f5d-967e-a30964dc433b
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: a1a160be-c3d0-54f5-b2f3-202caf8fbb99
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 91fd8f40-9675-5b2b-acc6-a920d1ab17f8
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_agremiacao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d476be34-e9cb-54b7-8920-715493e86668
+		summarizeBy: none
+		sourceColumn: sk_agremiacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nominais
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: bee2d0ee-d477-5da5-a074-f87528ff6c3f
+		summarizeBy: none
+		sourceColumn: qt_votos_nominais
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_legenda
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 7f7edb96-0cf4-591e-8812-013cbf7be094
+		summarizeBy: none
+		sourceColumn: qt_votos_legenda
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_VOTACAO_PARTIDO_ZONA = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_VOTACAO_PARTIDO_ZONA"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_cargo", "sk_municipio", "sk_zona", "sk_agremiacao", "qt_votos_nominais", "qt_votos_legenda"})
+				in
+				    Colunas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

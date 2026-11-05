@@ -1,0 +1,120 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "abstencao_q5",
+  "position": {
+    "x": 850,
+    "y": 85,
+    "z": 12,
+    "height": 625,
+    "width": 420,
+    "tabOrder": 12
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Aptos · Top 20 (Q5)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Aptos · Top 20 (Q5)",
+              "nativeQueryRef": "Aptos · Top 20 (Q5)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Taxa de abstenção · Top 20 (Q5)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Taxa de abstenção · Top 20 (Q5)",
+              "nativeQueryRef": "Taxa de abstenção · Top 20 (Q5)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Abstenções · Top 20 (Q5)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Abstenções · Top 20 (Q5)",
+              "nativeQueryRef": "Abstenções · Top 20 (Q5)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_DETALHE_ZONA"
+                  }
+                },
+                "Property": "Aptos · Top 20 (Q5)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q5 · 20 zonas com mais aptos e abstenção > 20%'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

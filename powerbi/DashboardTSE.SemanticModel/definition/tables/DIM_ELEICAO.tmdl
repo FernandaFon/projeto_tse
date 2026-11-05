@@ -1,0 +1,62 @@
+table DIM_ELEICAO
+	lineageTag: b2929397-b605-5bbe-b8ef-14f5bc9e4773
+
+	column Turno = FORMAT(DIM_ELEICAO[nr_turno], "0") & "º turno"
+		dataType: string
+		lineageTag: 423417c1-e3b4-55a9-b95a-e26680065458
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 7b0ea287-c324-5340-b77a-6ef4a8f0e11c
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f802886-dfdf-52a1-98e3-359f2f3fa5f1
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column nr_turno
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 6230bcdb-8b04-59ee-8f8f-180f13ea241f
+		summarizeBy: none
+		sourceColumn: nr_turno
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da eleição'
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: f6bfd6b1-4110-5038-bdc4-52f7b9182339
+		summarizeBy: none
+		sourceColumn: Data da eleição
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_ELEICAO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="DIM_ELEICAO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "ano", "turno", "dt_eleicao"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"ano", "Ano"}, {"turno", "nr_turno"}, {"dt_eleicao", "Data da eleição"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

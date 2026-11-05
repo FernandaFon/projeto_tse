@@ -1,0 +1,115 @@
+table DIM_PERFIL
+	lineageTag: fae8d41a-4afd-5790-a78d-37b8bba1cb70
+
+	column sk_perfil
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 5928915f-e9a7-54b6-af82-b508c7f32914
+		summarizeBy: none
+		sourceColumn: sk_perfil
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gênero'
+		dataType: string
+		lineageTag: 025147ac-7516-57e0-bc6b-d4c7c258c303
+		summarizeBy: none
+		sourceColumn: Gênero
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa etária'
+		dataType: string
+		lineageTag: aafd3d4b-fc51-5e89-bd6e-28b5498f4615
+		summarizeBy: none
+		sourceColumn: Faixa etária
+
+		annotation SummarizationSetBy = Automatic
+
+	column Escolaridade
+		dataType: string
+		lineageTag: a9a9e216-deed-5d1b-a251-8a4eecc010a9
+		summarizeBy: none
+		sourceColumn: Escolaridade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Feminino
+		dataType: boolean
+		lineageTag: 5ee2a02d-26fe-5419-b157-79fd7763a316
+		summarizeBy: none
+		sourceColumn: Feminino
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Jovem 18–24'
+		dataType: boolean
+		lineageTag: 9b65aaf7-4172-5441-ad71-c7d6cc5862e8
+		summarizeBy: none
+		sourceColumn: Jovem 18–24
+
+		annotation SummarizationSetBy = Automatic
+
+	column '60–69'
+		dataType: boolean
+		lineageTag: 3aa77fb3-b632-5fec-96ed-c56809fa5687
+		summarizeBy: none
+		sourceColumn: 60–69
+
+		annotation SummarizationSetBy = Automatic
+
+	column '70 ou mais'
+		dataType: boolean
+		lineageTag: 0e30ee14-6161-5b1d-9c27-6431b04fb6ce
+		summarizeBy: none
+		sourceColumn: 70 ou mais
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Voto facultativo'
+		dataType: boolean
+		lineageTag: 0b548a4b-4767-5110-9326-18aaa266b2bc
+		summarizeBy: none
+		sourceColumn: Voto facultativo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Escolaridade informada'
+		dataType: boolean
+		lineageTag: 7f08231f-b4fd-5a4d-9d59-da646ce057aa
+		summarizeBy: none
+		sourceColumn: Escolaridade informada
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sem médio completo'
+		dataType: boolean
+		lineageTag: 97aa9198-1cd0-5f0e-9ff5-2096617f58d4
+		summarizeBy: none
+		sourceColumn: Sem médio completo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Superior completo'
+		dataType: boolean
+		lineageTag: 7536e30e-a3ec-56b4-a320-3f7ae253f0db
+		summarizeBy: none
+		sourceColumn: Superior completo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_PERFIL = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="DIM_PERFIL"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_perfil", "ds_genero", "ds_faixa_etaria", "ds_grau_escolaridade", "fl_feminino", "fl_jovem_18_24", "fl_60_69", "fl_70_mais", "fl_facultativo", "fl_escolaridade_informada", "fl_sem_medio_completo", "fl_superior_completo"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"ds_genero", "Gênero"}, {"ds_faixa_etaria", "Faixa etária"}, {"ds_grau_escolaridade", "Escolaridade"}, {"fl_feminino", "Feminino"}, {"fl_jovem_18_24", "Jovem 18–24"}, {"fl_60_69", "60–69"}, {"fl_70_mais", "70 ou mais"}, {"fl_facultativo", "Voto facultativo"}, {"fl_escolaridade_informada", "Escolaridade informada"}, {"fl_sem_medio_completo", "Sem médio completo"}, {"fl_superior_completo", "Superior completo"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

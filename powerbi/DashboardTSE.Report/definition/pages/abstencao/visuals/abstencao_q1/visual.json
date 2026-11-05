@@ -1,0 +1,106 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "abstencao_q1",
+  "position": {
+    "x": 10,
+    "y": 85,
+    "z": 10,
+    "height": 625,
+    "width": 410,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Aptos jovens 18–24"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Aptos jovens 18–24",
+              "nativeQueryRef": "Aptos jovens 18–24"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Abstenção jovens 18–24 (Q1)"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Abstenção jovens 18–24 (Q1)",
+              "nativeQueryRef": "Abstenção jovens 18–24 (Q1)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                  }
+                },
+                "Property": "Abstenção jovens 18–24 (Q1)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q1 · Abstenção de jovens (18–24) por zona'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

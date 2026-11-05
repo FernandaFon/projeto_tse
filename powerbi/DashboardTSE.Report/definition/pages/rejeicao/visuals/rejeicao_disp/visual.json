@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "rejeicao_disp",
+  "position": {
+    "x": 640,
+    "y": 395,
+    "z": 12,
+    "height": 315,
+    "width": 630,
+    "tabOrder": 12
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_SECAO"
+                    }
+                  },
+                  "Property": "Seção (capital/zona)"
+                }
+              },
+              "queryRef": "DIM_SECAO.Seção (capital/zona)",
+              "nativeQueryRef": "Seção (capital/zona)"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "% sem médio da seção · K11a"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.% sem médio da seção · K11a",
+              "nativeQueryRef": "% sem médio da seção · K11a"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Taxa de brancos e nulos (seção) · K2b"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Taxa de brancos e nulos (seção) · K2b",
+              "nativeQueryRef": "Taxa de brancos e nulos (seção) · K2b"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Escolaridade × brancos e nulos (cada ponto é uma seção)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

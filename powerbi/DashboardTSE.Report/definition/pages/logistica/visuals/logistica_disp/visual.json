@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "logistica_disp",
+  "position": {
+    "x": 640,
+    "y": 395,
+    "z": 12,
+    "height": 315,
+    "width": 630,
+    "tabOrder": 12
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_SECAO"
+                    }
+                  },
+                  "Property": "Seção (capital/zona)"
+                }
+              },
+              "queryRef": "DIM_SECAO.Seção (capital/zona)",
+              "nativeQueryRef": "Seção (capital/zona)"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Aptos (seção)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Aptos (seção)",
+              "nativeQueryRef": "Aptos (seção)"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Taxa de abstenção (seção) · K1"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Taxa de abstenção (seção) · K1",
+              "nativeQueryRef": "Taxa de abstenção (seção) · K1"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Aptos × abstenção (cada ponto é uma seção)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

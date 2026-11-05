@@ -1,0 +1,70 @@
+table DIM_CANDIDATO
+	lineageTag: ebbd5688-5661-5bce-892a-61b7f2516a6a
+
+	column sk_candidato
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ed94e025-5ad4-5326-9d70-b102a1143d29
+		summarizeBy: none
+		sourceColumn: sk_candidato
+
+		annotation SummarizationSetBy = Automatic
+
+	column cd_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 4e7d6f2c-4fb2-5d4b-ba79-ed7ccf5baa05
+		summarizeBy: none
+		sourceColumn: cd_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Candidato
+		dataType: string
+		lineageTag: 00a78e51-f20b-5a21-9b64-1d4bf4ed4843
+		summarizeBy: none
+		sourceColumn: Candidato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Número do candidato'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b7abd4a-20da-544c-9e83-cafdd8d88ee3
+		summarizeBy: none
+		sourceColumn: Número do candidato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Partido do candidato'
+		dataType: string
+		lineageTag: 70cb0770-e8f4-52dd-a896-ad7bb8d7a1d8
+		summarizeBy: none
+		sourceColumn: Partido do candidato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situação da candidatura'
+		dataType: string
+		lineageTag: 11603233-0fad-59b7-86df-cb0531316a07
+		summarizeBy: none
+		sourceColumn: Situação da candidatura
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_CANDIDATO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="DIM_CANDIDATO"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_candidato", "cd_cargo", "nm_urna_candidato", "nr_candidato", "sg_partido", "ds_situacao_candidatura"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"nm_urna_candidato", "Candidato"}, {"nr_candidato", "Número do candidato"}, {"sg_partido", "Partido do candidato"}, {"ds_situacao_candidatura", "Situação da candidatura"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

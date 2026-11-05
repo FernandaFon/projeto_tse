@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "disputa_card1",
+  "position": {
+    "x": 270,
+    "y": 85,
+    "z": 11,
+    "height": 90,
+    "width": 250,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Limite de disputa (p.p.)"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Limite de disputa (p.p.)",
+              "nativeQueryRef": "Limite de disputa (p.p.)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Limite de disputa (p.p.)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

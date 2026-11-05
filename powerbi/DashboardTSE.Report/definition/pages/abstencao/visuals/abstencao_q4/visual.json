@@ -1,0 +1,106 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "abstencao_q4",
+  "position": {
+    "x": 430,
+    "y": 85,
+    "z": 11,
+    "height": 625,
+    "width": 410,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Comparecimento 60–69 · K7"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 60–69 · K7",
+              "nativeQueryRef": "Comparecimento 60–69 · K7"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                    }
+                  },
+                  "Property": "Comparecimento 70+ · K7"
+                }
+              },
+              "queryRef": "FATO_PERFIL_COMPARECIMENTO_ZONA.Comparecimento 70+ · K7",
+              "nativeQueryRef": "Comparecimento 70+ · K7"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_PERFIL_COMPARECIMENTO_ZONA"
+                  }
+                },
+                "Property": "Comparecimento 60–69 · K7"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q4 · Comparecimento de 60–69 e 70+ (menor primeiro)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

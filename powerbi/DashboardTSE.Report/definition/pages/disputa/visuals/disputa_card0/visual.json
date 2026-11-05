@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "disputa_card0",
+  "position": {
+    "x": 10,
+    "y": 85,
+    "z": 10,
+    "height": 90,
+    "width": 250,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Zonas de disputa"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Zonas de disputa",
+              "nativeQueryRef": "Zonas de disputa"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Zonas de disputa'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

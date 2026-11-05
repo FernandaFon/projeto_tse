@@ -1,0 +1,125 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "rejeicao_q6",
+  "position": {
+    "x": 640,
+    "y": 85,
+    "z": 11,
+    "height": 300,
+    "width": 630,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_MUNICIPIO"
+                    }
+                  },
+                  "Property": "Capital"
+                }
+              },
+              "queryRef": "DIM_MUNICIPIO.Capital",
+              "nativeQueryRef": "Capital"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "K2b · alta escolaridade (Q6)"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.K2b · alta escolaridade (Q6)",
+              "nativeQueryRef": "K2b · alta escolaridade (Q6)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Taxa de brancos e nulos (seção) · K2b"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Taxa de brancos e nulos (seção) · K2b",
+              "nativeQueryRef": "Taxa de brancos e nulos (seção) · K2b"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_DETALHE_SECAO"
+                  }
+                },
+                "Property": "K2b · alta escolaridade (Q6)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q6 · Brancos e nulos: seções de alta escolaridade × todas'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

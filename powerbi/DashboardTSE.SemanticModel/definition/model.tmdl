@@ -1,0 +1,29 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Servidor", "Banco", "DIM_ELEICAO", "DIM_CARGO", "DIM_MUNICIPIO", "DIM_ZONA", "DIM_SECAO", "DIM_PERFIL", "DIM_AGREMIACAO", "DIM_CANDIDATO", "DIM_TIPO_VOTO", "FATO_DETALHE_SECAO", "FATO_DETALHE_ZONA", "FATO_VOTACAO_SECAO_PARTIDO", "FATO_VOTACAO_PARTIDO_ZONA", "FATO_VOTACAO_CANDIDATO_ZONA", "FATO_PERFIL_ELEITORADO_SECAO", "FATO_PERFIL_COMPARECIMENTO_ZONA", "Limite de disputa"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table DIM_ELEICAO
+ref table DIM_CARGO
+ref table DIM_MUNICIPIO
+ref table DIM_ZONA
+ref table DIM_SECAO
+ref table DIM_PERFIL
+ref table DIM_AGREMIACAO
+ref table DIM_CANDIDATO
+ref table DIM_TIPO_VOTO
+ref table FATO_DETALHE_SECAO
+ref table FATO_DETALHE_ZONA
+ref table FATO_VOTACAO_SECAO_PARTIDO
+ref table FATO_VOTACAO_PARTIDO_ZONA
+ref table FATO_VOTACAO_CANDIDATO_ZONA
+ref table FATO_PERFIL_ELEITORADO_SECAO
+ref table FATO_PERFIL_COMPARECIMENTO_ZONA
+ref table 'Limite de disputa'

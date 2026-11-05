@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "executiva_card5",
+  "position": {
+    "x": 1070,
+    "y": 85,
+    "z": 15,
+    "height": 90,
+    "width": 200,
+    "tabOrder": 15
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_ZONA"
+                    }
+                  },
+                  "Property": "Válidos por abstenção · K9"
+                }
+              },
+              "queryRef": "FATO_DETALHE_ZONA.Válidos por abstenção · K9",
+              "nativeQueryRef": "Válidos por abstenção · K9"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Válidos por abstenção · K9'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

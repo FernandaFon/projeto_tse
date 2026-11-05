@@ -1,0 +1,111 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "logistica_quartil",
+  "position": {
+    "x": 10,
+    "y": 85,
+    "z": 10,
+    "height": 625,
+    "width": 620,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_SECAO"
+                    }
+                  },
+                  "Property": "Quartil de tamanho"
+                }
+              },
+              "queryRef": "DIM_SECAO.Quartil de tamanho",
+              "nativeQueryRef": "Quartil de tamanho"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_MUNICIPIO"
+                    }
+                  },
+                  "Property": "Capital"
+                }
+              },
+              "queryRef": "DIM_MUNICIPIO.Capital",
+              "nativeQueryRef": "Capital"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_DETALHE_SECAO"
+                    }
+                  },
+                  "Property": "Taxa de abstenção (seção) · K1"
+                }
+              },
+              "queryRef": "FATO_DETALHE_SECAO.Taxa de abstenção (seção) · K1",
+              "nativeQueryRef": "Taxa de abstenção (seção) · K1"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Q9 · Abstenção por quartil de tamanho da seção (K10)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

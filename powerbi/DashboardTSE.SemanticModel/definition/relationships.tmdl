@@ -1,0 +1,143 @@
+relationship 7e1d77f1-36bb-5ef7-876a-6ad8afdf0ed4
+	fromColumn: FATO_DETALHE_SECAO.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship 9856ebd2-3c12-55a7-b1a7-f7b6d28a6b30
+	fromColumn: FATO_DETALHE_SECAO.sk_cargo
+	toColumn: DIM_CARGO.sk_cargo
+
+relationship eae863f0-fdb1-54f5-a45e-096b36f99f10
+	fromColumn: FATO_DETALHE_SECAO.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship 50ddda68-b965-59d2-84ca-92ad2858a5c2
+	fromColumn: FATO_DETALHE_SECAO.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship c6052175-1dcb-53ee-867a-cab82c8c9b8b
+	fromColumn: FATO_DETALHE_SECAO.sk_secao
+	toColumn: DIM_SECAO.sk_secao
+
+relationship 0c389130-77f9-5a87-b639-c22bf63600a6
+	fromColumn: FATO_DETALHE_ZONA.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship f4952cff-85f8-5f8f-8cad-61fecdd49f9b
+	fromColumn: FATO_DETALHE_ZONA.sk_cargo
+	toColumn: DIM_CARGO.sk_cargo
+
+relationship 55b04ad7-09f5-5527-820f-1bf44889b168
+	fromColumn: FATO_DETALHE_ZONA.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship 8e4889e5-b635-5c27-943c-abdd0e37d601
+	fromColumn: FATO_DETALHE_ZONA.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship 805a790b-56da-5737-8bad-82b5e2cb1186
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship 4d68246b-cb57-5b85-8da4-d623a794267e
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_cargo
+	toColumn: DIM_CARGO.sk_cargo
+
+relationship 153640c4-8fe7-53c7-be5d-2fbc3a2c7d48
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship 603b8289-57d7-5919-b180-e5778b010933
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship 9f23451c-89d2-5f59-94ae-8fa51e8f1570
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_secao
+	toColumn: DIM_SECAO.sk_secao
+
+relationship 12d699ff-a5ca-5623-b816-8322beeb0202
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_agremiacao
+	toColumn: DIM_AGREMIACAO.sk_agremiacao
+
+relationship d85077e9-be6a-57fb-9f39-2ef95775bdde
+	fromColumn: FATO_VOTACAO_SECAO_PARTIDO.sk_tipo_voto
+	toColumn: DIM_TIPO_VOTO.sk_tipo_voto
+
+relationship 5d3fe810-b25f-5810-b28b-57ccbc810daf
+	fromColumn: FATO_VOTACAO_PARTIDO_ZONA.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship 3781e91e-2201-5a31-a2b2-cab315298295
+	fromColumn: FATO_VOTACAO_PARTIDO_ZONA.sk_cargo
+	toColumn: DIM_CARGO.sk_cargo
+
+relationship 7ab55612-c720-5440-a8b7-fcf77ea5b87d
+	fromColumn: FATO_VOTACAO_PARTIDO_ZONA.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship b9223ffc-9c3b-5fc8-861f-0d364134e3b0
+	fromColumn: FATO_VOTACAO_PARTIDO_ZONA.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship 830d1dda-a8e5-58d0-b72e-0ab6ad34bba8
+	fromColumn: FATO_VOTACAO_PARTIDO_ZONA.sk_agremiacao
+	toColumn: DIM_AGREMIACAO.sk_agremiacao
+
+relationship c94bfedb-1cec-5fdd-87a7-945eeb89b793
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship fe9b17c8-b0fa-5a8b-b6f3-f789318a33cc
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_cargo
+	toColumn: DIM_CARGO.sk_cargo
+
+relationship 30f03119-639f-5e44-9aed-4ba0e847ded2
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship 270f891b-f098-5b47-aa50-2219b18985d2
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship 8a7b5c6e-1a06-519b-aca9-7de9d41b00df
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_candidato
+	toColumn: DIM_CANDIDATO.sk_candidato
+
+relationship 75a8f998-09a7-5bf4-9b2b-8a26db7815f8
+	fromColumn: FATO_VOTACAO_CANDIDATO_ZONA.sk_agremiacao
+	toColumn: DIM_AGREMIACAO.sk_agremiacao
+
+relationship 4e6f01ae-14f7-533c-b197-356c46f79c9c
+	fromColumn: FATO_PERFIL_ELEITORADO_SECAO.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship 99e7b14d-a1bc-5390-ba75-1c0f7eeba92f
+	fromColumn: FATO_PERFIL_ELEITORADO_SECAO.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship 6a57e3bb-95cc-54e7-ad5f-c7e9983c2dc7
+	fromColumn: FATO_PERFIL_ELEITORADO_SECAO.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship 62fb325a-a102-5127-b90c-3d42527c3c88
+	fromColumn: FATO_PERFIL_ELEITORADO_SECAO.sk_secao
+	toColumn: DIM_SECAO.sk_secao
+
+relationship 7a9c39be-6324-5cb0-8735-d32399d8e5c0
+	fromColumn: FATO_PERFIL_ELEITORADO_SECAO.sk_perfil
+	toColumn: DIM_PERFIL.sk_perfil
+
+relationship 22e5c074-940f-52a3-b7a6-5dc5c46cc1f0
+	fromColumn: FATO_PERFIL_COMPARECIMENTO_ZONA.sk_eleicao
+	toColumn: DIM_ELEICAO.sk_eleicao
+
+relationship a88b7291-ae9d-5fe8-9c9c-32251cdf2bd6
+	fromColumn: FATO_PERFIL_COMPARECIMENTO_ZONA.sk_municipio
+	toColumn: DIM_MUNICIPIO.sk_municipio
+
+relationship d9b7af28-ab33-5793-a971-2dfd77b22b3e
+	fromColumn: FATO_PERFIL_COMPARECIMENTO_ZONA.sk_zona
+	toColumn: DIM_ZONA.sk_zona
+
+relationship de5720f4-257e-50bf-9214-c4304982b860
+	fromColumn: FATO_PERFIL_COMPARECIMENTO_ZONA.sk_perfil
+	toColumn: DIM_PERFIL.sk_perfil

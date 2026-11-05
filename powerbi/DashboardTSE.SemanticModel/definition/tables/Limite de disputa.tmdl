@@ -1,0 +1,22 @@
+table 'Limite de disputa'
+	lineageTag: 111242bd-2750-5482-9cb8-29daf62dbd2a
+
+	column 'Limite (p.p.)'
+		dataType: int64
+		formatString: 0
+		lineageTag: d1b86445-c001-58aa-9b47-071b2b951057
+		summarizeBy: none
+		sourceColumn: Limite (p.p.)
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Limite de disputa' = m
+		mode: import
+		source =
+				let
+				    // Corte da "zona de disputa" (Termo: 3, 5 ou 10 p.p.)
+				    Fonte = #table(type table [#"Limite (p.p.)" = Int64.Type], {{3}, {5}, {10}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table

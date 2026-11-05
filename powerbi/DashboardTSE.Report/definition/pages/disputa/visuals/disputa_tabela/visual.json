@@ -1,0 +1,120 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "disputa_tabela",
+  "position": {
+    "x": 640,
+    "y": 85,
+    "z": 21,
+    "height": 625,
+    "width": 630,
+    "tabOrder": 21
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DIM_ZONA"
+                    }
+                  },
+                  "Property": "Zona (capital)"
+                }
+              },
+              "queryRef": "DIM_ZONA.Zona (capital)",
+              "nativeQueryRef": "Zona (capital)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Margem de competitividade (p.p.) · K4"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Margem de competitividade (p.p.) · K4",
+              "nativeQueryRef": "Margem de competitividade (p.p.) · K4"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Zona de disputa?"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Zona de disputa?",
+              "nativeQueryRef": "Zona de disputa?"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                    }
+                  },
+                  "Property": "Votos nominais válidos (candidato)"
+                }
+              },
+              "queryRef": "FATO_VOTACAO_CANDIDATO_ZONA.Votos nominais válidos (candidato)",
+              "nativeQueryRef": "Votos nominais válidos (candidato)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FATO_VOTACAO_CANDIDATO_ZONA"
+                  }
+                },
+                "Property": "Margem de competitividade (p.p.) · K4"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Zonas de disputa: margem abaixo do limite'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

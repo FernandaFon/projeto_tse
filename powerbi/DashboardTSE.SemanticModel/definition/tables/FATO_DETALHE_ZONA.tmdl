@@ -1,0 +1,210 @@
+table FATO_DETALHE_ZONA
+	lineageTag: 1a02499d-2396-55ba-b365-4013b88727d4
+
+	/// Base 7. Eleitores aptos.
+	measure 'Aptos (zona)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_ZONA[qt_aptos]), DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 396e515a-88c8-545e-b367-2280b89f5f4c
+
+	measure 'Comparecimento (zona)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_ZONA[qt_comparecimento]), DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: a98115b0-73f7-53f7-98fa-c8c1ed44a239
+
+	/// K6: abstenções em número absoluto.
+	measure 'Abstenções (zona) · K6' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_ZONA[qt_abstencoes]), DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: f4f2ed24-f09b-5ad3-9774-c331d135340d
+
+	/// K1 total: abstenções ÷ aptos.
+	measure 'Taxa de abstenção (zona) · K1' = DIVIDE([Abstenções (zona) · K6], [Aptos (zona)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 65c82ec6-0bbd-582b-b22c-2d2341dc5cd8
+
+	/// Nominais + legenda.
+	measure 'Votos válidos (zona)' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_ZONA[qt_votos_nominais]) + SUM(FATO_DETALHE_ZONA[qt_votos_legenda]), DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: 36e483e6-f78a-50d4-8dc3-5891baf5aace
+
+	measure 'Brancos e nulos (zona) · K2' =
+			VAR _cargo = IF(HASONEVALUE(DIM_CARGO[cd_cargo]), VALUES(DIM_CARGO[cd_cargo]), 1)
+			VAR _turno = IF(HASONEVALUE(DIM_ELEICAO[nr_turno]), VALUES(DIM_ELEICAO[nr_turno]), 1)
+			RETURN
+			    CALCULATE(SUM(FATO_DETALHE_ZONA[qt_votos_brancos]) + SUM(FATO_DETALHE_ZONA[qt_votos_nulos]), DIM_CARGO[cd_cargo] = _cargo, DIM_ELEICAO[nr_turno] = _turno)
+		formatString: #,0
+		lineageTag: ddf95916-deec-5662-87fa-dbd9bd9252f1
+
+	measure 'Taxa de brancos e nulos (zona) · K2b' = DIVIDE([Brancos e nulos (zona) · K2], [Comparecimento (zona)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 15514220-6040-59d1-ad1a-0e673dc98c13
+
+	/// K8: votos válidos ÷ aptos.
+	measure 'Engajamento global · K8' = DIVIDE([Votos válidos (zona)], [Aptos (zona)])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 620f1735-1bc1-5a2d-aee2-a73c4c6898e3
+
+	/// K9: votos válidos ÷ abstenções.
+	measure 'Válidos por abstenção · K9' = DIVIDE([Votos válidos (zona)], [Abstenções (zona) · K6])
+		formatString: 0.00
+		lineageTag: 87b38def-9d4c-5225-a2ee-3062eadd04f7
+
+	/// Ranking por aptos entre zonas com abstenção acima de 20%.
+	measure 'Posição Q5' =
+			VAR _taxa = [Taxa de abstenção (zona) · K1]
+			RETURN
+			    IF(_taxa > 0.20,
+			        RANKX(FILTER(ALLSELECTED(DIM_ZONA[Zona (capital)]), [Taxa de abstenção (zona) · K1] > 0.20),
+			              [Aptos (zona)], , DESC))
+		formatString: 0
+		lineageTag: 92e16ac7-60b0-59db-9a7c-6f1c6620ce39
+
+	measure 'Aptos · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Aptos (zona)])
+		formatString: #,0
+		lineageTag: 6639ff6c-a54f-52f4-94c2-2200d7b671dc
+
+	measure 'Taxa de abstenção · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Taxa de abstenção (zona) · K1])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 44f27e4e-d9ac-59df-8465-ff2f1bca9b22
+
+	measure 'Abstenções · Top 20 (Q5)' = VAR _p = [Posição Q5] RETURN IF(NOT ISBLANK(_p) && _p <= 20, [Abstenções (zona) · K6])
+		formatString: #,0
+		lineageTag: 2eb13c7c-48df-5e1b-8bd6-f7ef472160e8
+
+	column sk_eleicao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: bf1dfbff-75a5-5cf9-b8b5-c5296d7df6b5
+		summarizeBy: none
+		sourceColumn: sk_eleicao
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cargo
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 599a5356-307e-5be8-bf12-25686dbf7bcc
+		summarizeBy: none
+		sourceColumn: sk_cargo
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_municipio
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 0bc57a3e-3bd3-5f38-90bc-cb98add57a5b
+		summarizeBy: none
+		sourceColumn: sk_municipio
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_zona
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 348a6ad2-e1f9-5779-bd22-3b59c460f429
+		summarizeBy: none
+		sourceColumn: sk_zona
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_aptos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: e7ca8a88-1b49-597f-89b4-a51091fc43f6
+		summarizeBy: none
+		sourceColumn: qt_aptos
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_comparecimento
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2ab27c4f-b3b0-5273-ad0f-98db73117fbd
+		summarizeBy: none
+		sourceColumn: qt_comparecimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_abstencoes
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 722e5d5f-970d-5f68-8a5a-f08720baaa1c
+		summarizeBy: none
+		sourceColumn: qt_abstencoes
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nominais
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 70240fb0-96db-5aeb-b19e-87bb3681ef7c
+		summarizeBy: none
+		sourceColumn: qt_votos_nominais
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_legenda
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 15e4adee-26ca-5047-97f5-896ab341558d
+		summarizeBy: none
+		sourceColumn: qt_votos_legenda
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_brancos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 6a1f58c4-a52a-58ef-adc9-6e55b9d43303
+		summarizeBy: none
+		sourceColumn: qt_votos_brancos
+
+		annotation SummarizationSetBy = Automatic
+
+	column qt_votos_nulos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 1a9027df-3450-5e54-9f07-3827a3a4556c
+		summarizeBy: none
+		sourceColumn: qt_votos_nulos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FATO_DETALHE_ZONA = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="FATO_DETALHE_ZONA"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_eleicao", "sk_cargo", "sk_municipio", "sk_zona", "qt_aptos", "qt_comparecimento", "qt_abstencoes", "qt_votos_nominais", "qt_votos_legenda", "qt_votos_brancos", "qt_votos_nulos"})
+				in
+				    Colunas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

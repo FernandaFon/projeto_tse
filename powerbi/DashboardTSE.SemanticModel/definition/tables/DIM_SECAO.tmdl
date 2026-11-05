@@ -1,0 +1,152 @@
+table DIM_SECAO
+	lineageTag: 59b168b9-f0fe-50d4-9b8a-833d0e80d3a4
+
+	column 'Baixa escolaridade' = IF(DIM_SECAO[pr_sem_medio] >= 0.75, "Sim", "Não")
+		dataType: string
+		lineageTag: accbccd8-e5b9-5c93-be2f-04ac8613e572
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Alta escolaridade' = IF(DIM_SECAO[pr_superior] >= 0.75, "Sim", "Não")
+		dataType: string
+		lineageTag: bd505d74-4898-5b8d-a1d7-7611f1793e94
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Quartil de tamanho' = SWITCH(DIM_SECAO[quartil_aptos], 1, "Q1 (menores)", 2, "Q2", 3, "Q3", 4, "Q4 (maiores)", "Sem dado")
+		dataType: string
+		lineageTag: fff1224c-be99-5f46-aa9c-d33ed9a8c1b0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_secao
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: a3ab8d0c-a26a-5cfe-b34e-a44b0c0908f3
+		summarizeBy: none
+		sourceColumn: sk_secao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Seção'
+		dataType: int64
+		formatString: 0
+		lineageTag: c27c446a-f54c-5607-ba29-ea064b88ac97
+		summarizeBy: none
+		sourceColumn: Seção
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Seção (capital/zona)'
+		dataType: string
+		lineageTag: 50cf4637-f260-5f94-8908-1a7dee85f79d
+		summarizeBy: none
+		sourceColumn: Seção (capital/zona)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Local de votação'
+		dataType: string
+		lineageTag: 30fd3292-8b3d-5794-a4d5-4d81694ab708
+		summarizeBy: none
+		sourceColumn: Local de votação
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bairro
+		dataType: string
+		lineageTag: f1d409c1-f88e-5b49-8beb-22489af99850
+		summarizeBy: none
+		sourceColumn: Bairro
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: 9fa47da5-d2c1-5fc3-a428-9a80599f35ab
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column Longitude
+		dataType: double
+		lineageTag: cd07ffa9-e2c0-5f2c-bdcb-3f855312075d
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% sem médio completo · K11a'
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 46ed2ddb-180d-5a52-9941-75d4cb41a886
+		summarizeBy: none
+		sourceColumn: % sem médio completo · K11a
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% superior completo · K11b'
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 0f06e347-1c7e-5d1f-8a79-76459eadfd71
+		summarizeBy: none
+		sourceColumn: % superior completo · K11b
+
+		annotation SummarizationSetBy = Automatic
+
+	column pr_sem_medio
+		dataType: double
+		isHidden
+		lineageTag: 591a35b8-844f-5293-acac-ea78ed11d19f
+		summarizeBy: none
+		sourceColumn: pr_sem_medio
+
+		annotation SummarizationSetBy = Automatic
+
+	column pr_superior
+		dataType: double
+		isHidden
+		lineageTag: 7226db10-b877-5ab4-bb64-28dd3cd917aa
+		summarizeBy: none
+		sourceColumn: pr_superior
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aptos (referência)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: c4fdccc5-0da5-54ed-a343-b2ddcdde9f20
+		summarizeBy: none
+		sourceColumn: Aptos (referência)
+
+		annotation SummarizationSetBy = Automatic
+
+	column quartil_aptos
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ff11ae49-d04b-5ae6-bbbf-6b3dad683112
+		summarizeBy: none
+		sourceColumn: quartil_aptos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIM_SECAO = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Tabela = Fonte{[Schema="dw", Item="VW_SECAO_BI"]}[Data],
+				    Colunas = Table.SelectColumns(Tabela, {"sk_secao", "nr_secao", "ds_secao", "nm_local_votacao", "nm_bairro", "latitude", "longitude", "pct_sem_medio", "pct_superior", "pr_sem_medio", "pr_superior", "qt_aptos_referencia", "quartil_aptos"}),
+				    Renomeadas = Table.RenameColumns(Colunas, {{"nr_secao", "Seção"}, {"ds_secao", "Seção (capital/zona)"}, {"nm_local_votacao", "Local de votação"}, {"nm_bairro", "Bairro"}, {"latitude", "Latitude"}, {"longitude", "Longitude"}, {"pct_sem_medio", "% sem médio completo · K11a"}, {"pct_superior", "% superior completo · K11b"}, {"qt_aptos_referencia", "Aptos (referência)"}})
+				in
+				    Renomeadas
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
