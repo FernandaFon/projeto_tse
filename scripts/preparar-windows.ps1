@@ -27,6 +27,7 @@ function Atualizar-Path {
 function Rodar($linha) { cmd /c $linha | Out-Host; return $LASTEXITCODE }
 
 $Projeto = Split-Path -Parent $PSScriptRoot
+$pendencias = @()
 $Compartilhado = '\\host.lan\Data'
 
 # ---------------------------------------------------------------- 1. PATH
@@ -103,6 +104,11 @@ if ($existentes -notcontains $seguro) {
     Rodar "git config --global --add safe.directory `"$seguro`"" | Out-Null
     Ok "Git: $seguro marcado como seguro"
 }
+# O repositório dos plugins tem caminhos acima do limite de 260 caracteres do Windows
+if ((cmd /c "git config --global --get core.longpaths 2>nul") -ne 'true') {
+    Rodar "git config --global core.longpaths true" | Out-Null
+    Ok "Git: caminhos longos habilitados (core.longpaths)"
+}
 
 # ---------------------------------------------------------------- 5. MCP
 Etapa "5/6 MCP de modelagem do Power BI (Microsoft)"
@@ -120,21 +126,30 @@ try {
     # ------------------------------------------------------------ 6. Plugins
     Etapa "6/6 Plugins do Claude Code para Power BI (pbip e reports)"
     $mk = 'power-bi-agentic-development'
+    # sobra de uma tentativa interrompida impede o próximo clone
+    $restoClone = Join-Path $HOME '.claude\plugins\marketplaces\data-goblin-power-bi-agentic-development..clone'
+    if (Test-Path $restoClone) { Remove-Item -Recurse -Force $restoClone }
     if ((Rodar "claude plugin marketplace add data-goblin/power-bi-agentic-development --scope local") -ne 0) {
-        Aviso "Marketplace não adicionado (talvez já exista); seguindo."
+        # já adicionado antes: só atualiza o catálogo
+        if ((Rodar "claude plugin marketplace update $mk") -ne 0) { $pendencias += "marketplace $mk" }
     }
     foreach ($plugin in @('pbip', 'reports')) {
-        if ((Rodar "claude plugin install $plugin@$mk --scope local") -ne 0) {
-            Aviso "Plugin $plugin não instalado (talvez já esteja); seguindo."
-        } else {
+        if ((Rodar "claude plugin install $plugin@$mk --scope local") -eq 0) {
             Ok "Plugin $plugin instalado"
+        } else {
+            $pendencias += "plugin $plugin"
         }
     }
 } finally {
     Pop-Location
 }
 
-Write-Host "`nTudo pronto!" -ForegroundColor Green
+if ($pendencias.Count) {
+    Aviso ("Ficou pendente: " + ($pendencias -join ', ') + ". Veja as mensagens acima e rode o script de novo.")
+    Write-Host "O resto já está pronto; dá para usar o Claude Code sem os plugins enquanto isso."
+} else {
+    Write-Host "`nTudo pronto!" -ForegroundColor Green
+}
 Write-Host "1. Abra no Power BI Desktop: $ProjetoLocal\powerbi\DashboardTSE.pbip e clique em Atualizar."
 Write-Host "2. Abra um PowerShell NOVO e rode:  cd $ProjetoLocal ; claude"
 Write-Host "3. Na primeira vez, aceite o EULA do MCP da Microsoft e aprove os comandos 'pbir' quando o Claude pedir."
